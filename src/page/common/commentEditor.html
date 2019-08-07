@@ -1,0 +1,19 @@
+<div class="ws_cmt_editor <%= type === 'reply' ? 'hide' : '' %>">
+	<% if (type === 'comment'){ %>
+		<a class="avatar">
+			<img src="<%= (user && user.avatar) || '/assets/image/avatar.png' %>"
+				title="<%= (user && user.nickName) || '登录后评论' %>" width="38px" height="38px"/>
+		</a>
+	<% } %>
+	<form class="ws_cmt_form">
+		<textarea name="comment" placeholder="智慧如你，不留下点什么吗..." id="cmt_editor"></textarea>
+	</form>
+	<div class="cmt_fn_block">
+		<div class="emoji_wrap">
+			<a href="javascript:;" class="emoji_switch ws_iconfont ws_emoji"></a>
+		</div>
+		<span class="hint">Ctrl+Enter发表</span>
+		<a class="publish" href="javascript:;">发表</a>
+		<a class="cancel" href="javascript:;">取消</a>
+	</div>
+</div>

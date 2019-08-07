@@ -1,0 +1,37 @@
+@import './common/_reset.scss';
+@import './common/_header.scss';
+@import './common/_footer.scss';
+@import './common/_mixins.scss';
+
+.container {
+	@include container();
+}
+
+.ws_cmt_editor {
+	@include cmtEditor();
+	width: 60%;
+	margin: 30px auto;
+}
+
+.ws_emoji_tabs {
+	@include emojiPanel();
+}
+
+.ws_arrow_top {
+	@include arrowTop();
+}
+.comment {
+	@include comment();
+}
+.statistic_area {
+	.left {
+		width: 68%;
+		padding-left: 100px;
+	}
+	.right {
+		width: 30%;
+	}
+}
+.side_tools {
+	@include sideTool();
+}

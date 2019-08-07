@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<%- include('./common/meta.html') %>
+	<link rel="stylesheet" href="/assets/static/css/error.css">
+	<title>微识 - 服务器错误</title>
+</head>
+<body>
+	<%- include('./common/header.html') %>
+	<h1>sorry server error</h1>
+	<% if (env === 'development') { %>
+		<p><%= error %></p>
+		<% } %>
+	<%- include('./common/footer.html') %>
+</body>
+</html>

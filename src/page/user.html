@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<%- include('./common/meta.html') %>
+	<%- include('./common/iconfont.html') %>
+	<link rel="stylesheet" href="/assets/static/css/user.css">
+	<title>微识 - <%= data.nickName %></title>
+</head>
+<body>
+	<%- include('./common/header.html') %>
+	<div class="container">
+		<div class="cnt_main">
+			<article class="article_list" id="article_list">
+				<%- include('./common/article.list.html', {
+					articles: data.articles.map(el => {
+						el.User = data
+						return el
+					})
+				}) %>
+			</article>
+		</div>
+		<div class="aside">
+			<div class="user-widget module_bg">
+				<div class="avatar">
+					<a href="/u/<%= data.userName %>">
+						<img src="<%= data.avatar %>" title="<%= data.nickName %>"><br/>
+						<strong><%= data.nickName %></strong>
+					</a>
+				</div>
+				<ul class="info_statistic">
+					<li>微龄：<%= data.age %>天</li>
+					<li>文章数：<%= data.articles.length %></li>
+					<li>获赞：0</li>
+					<% if (data.github) { %>
+						<li class="ws_iconfont ws_git">：<a href="<%= data.github %>" target="_blank"><%= data.github %></a></li>
+					<% } %>
+					<% if (data.email) { %>
+						<li class="ws_iconfont ws_email">：<a href="mailto:<%= data.email %>"><%= data.email %></a></li>
+					<% } %>
+					<% if (data.url) { %>
+						<li class="ws_iconfont ws_wangzhan">：<a href="<%= data.url %>" target="_blank"><%= data.url %></a></li>
+					<% }%>
+				</ul>
+				<p class="bio">
+					<%= data.bio %>
+				</p>
+				<div class="contact" id="contact">
+					<% if (data.resume) { %>
+						<a href="/api/resume/<%= data.userName %>" filename="<%= data.resume %>" id="down_resume">
+							下载简历
+						</a>
+					<% }%>
+					<% if (user && user.id === data.id){ %>
+						<label>
+							<input type="file" name="resume" accept=".doc,.docx,.dot,image/*,.pdf,.ppt">
+							<a class="upload_resume">上传简历</a>
+						</label>
+					<% } %>
+				</div>
+			</div>
+			<% if (data.tags && data.tags.length) { %>
+				<div class="module module_bg tag_statistic">
+					<h3 class="title">标签</h3>
+					<% data.tags.forEach(tag => { %>
+						<a href="/u/<%= data.userName %>/tag/<%= tag.name %>" class="tag" target="_blank">
+							<%= tag.dataValues.name + '(' + tag.dataValues.articleCount + ')' %>
+						</a>
+					<% }) %>
+				</div>
+			<% } %>
+			<% if (data.categoryStatistic && data.categoryStatistic.length) { %>
+				<ul class="module module_bg category_statistic">
+					<h3 class="title">分类</h3>
+					<% data.categoryStatistic.forEach(statistic => { %>
+						<% if (statistic.categories) { %>
+							<li>
+								<a href="/u/<%= data.userName %>/category/<%= statistic.categories.name %>" class="category" target="_blank">
+									<%= statistic.categories.name + '(' + statistic.dataValues.categoryArticleCount + ')' %>
+								</a>
+							</li>
+						<% } %>
+					<% }) %>
+				</ul>
+			<% } %>
+			<% if (data.createMonthStatistic && data.createMonthStatistic.length) { %>
+				<ul class="module module_bg category_statistic">
+					<h3 class="title">博客档案</h3>
+					<% data.createMonthStatistic.forEach(statistic => { %>
+						<li>
+							<a href="/u/<%= data.userName %>/archive/<%= statistic.createMonth.split('-').join('/') %>" class="category" target="_blank">
+								<%= statistic.createMonth + '(' + statistic.monthCount + ')' %>
+							</a>
+						</li>
+					<% }) %>
+				</ul>
+			<% } %>
+		</div>
+	</div>
+	<%- include('./common/sideTool.html', {
+		heart: false,
+		catelog: false
+	}) %>
+	<%- include('./common/footer.html') %>
+	<script src="/assets/static/js/user.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+@import './common/_reset.scss';
+@import './common/upload.css';
+@import './common/_header.scss';
+@import './common/_footer.scss';
+@import './common/_common.scss';
+@import './common/_mixins.scss';
+@import './common/_variables.scss';
+
+html, body {
+	height: 100%;
+}
+.container {
+	width: 40vw;
+	margin: 30px auto;
+	overflow: hidden;
+}
+.menus {
+	position: fixed;
+	top: 0;
+	left: 10vw;
+	bottom: 0;
+	margin-top: 80px;
+    padding: 0 0 30px;
+    width: 150px;
+	overflow: auto;
+	a {
+		display: inline-block;
+		width: 100%;
+		line-height: 36px;
+		padding-left: 15px;
+		&:hover {
+			background-color: #fff;
+		}
+	}
+}
+.panels {
+	padding: 10px 15px;
+}
+input[type=file] {
+	display: none;
+}
+
+input, textarea {
+	width: 100%;
+	height: $formElHeight;
+	padding: 0 10px;
+	border: none;
+	background-color: rgba($color: $borderColor, $alpha: .1);
+	border: 1px solid $borderColor;
+}
+textarea {
+	height: 120px;
+	resize: none;
+	padding: 10px;
+}
+.avatar {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+
+table {
+	width: 100%;
+	td {
+		padding: 15px 0;
+		border-bottom: 1px solid $borderColor;
+	}
+	tr td:first-child {
+		width: 150px;
+	}
+}
+.cate_list {
+	white-space: normal;
+}
+.cate_item {
+	margin: 10px;
+	vertical-align: middle;
+	@include listItem();
+}
+#upload_annex {
+	text-align: center;
+	border: 1px dashed $borderColor;
+	&.enter {
+		border-color: $highLightColor;
+	}
+}
+
+.side_tools {
+	@include sideTool();
+}
+
+.add_category {
+	width: 120px;
+	display: inline-block;
+	vertical-align: middle;
+}

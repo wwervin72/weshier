@@ -1,0 +1,88 @@
+@import './_variables.scss';
+@import './_mixins.scss';
+
+.ws_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $headerHeight;
+    border-bottom: 1px solid #ddd;
+    background-color: $bgColor;
+    z-index: 1000;
+    &.slide_down {
+        box-shadow: 0 0 5px #aaa;
+    }
+}
+
+.logo {
+    @include logo;
+}
+
+.ws_header_content {
+    display: flex;
+    min-width: 768px;
+    max-width: 1440px;
+    margin: 0 auto;
+    .logo {
+        flex: 0 0 100px;
+        margin-top: 2.5px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .user_area {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+    }
+    .user_right {
+        font-size: 0;
+        & > a,
+        & > .user_dropdown {
+            display: inline-block;
+            height: 49px;
+            line-height: 49px;
+            padding: 0 15px;
+            transition: color ease-in .3s;
+            font-size: 14px;
+            cursor: pointer;
+            &:hover {
+                color: $highLightColor;
+            }
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+    }
+    .user_dropdown {
+        position: relative;
+        &:hover {
+            .dropdown {
+                display: block;
+            }
+        }
+        .dropdown {
+			position: absolute;
+            min-width: 150%;
+            top: 49px;
+            left: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,.1);
+            padding: 10px 0;
+            z-index: 100;
+            display: none;
+            background-color: #fff;
+            a {
+                display: block;
+                height: 36px;
+                line-height: 36px;
+                padding: 0 15px;
+                &:hover {
+                    background-color: #f1f1f1;
+                }
+            }
+        }
+    }
+}

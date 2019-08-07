@@ -1,0 +1,30 @@
+@import './variables';
+
+footer {
+	width: 100%;
+	padding: 50px;
+	margin-top: 30px;
+	background-color: $moduleBGC;
+	p {
+		line-height: 36px;
+		text-align: center;
+	}
+}
+
+.footer_list {
+	display: flex;
+	border-bottom: 1px solid $borderColor;
+	padding-bottom: 20px;
+	margin-bottom: 10px;
+}
+
+.info_module {
+	flex: 1;
+	&, a {
+		color: $grayColor;
+	}
+	a:hover {
+		color: $highLightColor;
+		text-decoration: underline;
+	}
+}

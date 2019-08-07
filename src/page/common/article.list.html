@@ -1,0 +1,28 @@
+<% articles.forEach(function (article) { %>
+	<div class="article clear module_bg">
+		<% if (article.thumbnail) { %>
+			<div class="avatar right">
+				<a  href="/a/<%= article.id %>">
+					<img src="<%= article.thumbnail %>" title="<%= article.title %>">
+				</a>
+			</div>
+		<% } %>
+		<div class="content">
+			<a class="title" href="/a/<%= article.id %>" target="_blank">
+				<%= article.title %>
+			</a>
+			<p class="abstract">
+				<%= article.abstract %>
+			</p>
+		</div>
+		<div class="base_info">
+			<a href="/u/<%= article.User.userName %>"><%= article.User.nickName %></a> 发布于 <%= article.createdAt %>
+			<a href="/a/<%= article.id %>#heart_row" class="heart_num ws_iconfont ws_heart"><%= article.Hearts.length || 0 %></a>
+			<a href="/a/<%= article.id %>#comment" class="comment_num ws_iconfont ws_comment"><%= article.Comments.length || 0 %></a>
+			<% if (user && article.User.id === user.id) { %>
+				<a class="right edit_article" href="/a/edit/<%= article.id %>">编辑</a>
+				<a class="right del_article" href="javascript:;">删除</a>
+			<% } %>
+		</div>
+	</div>
+<% }) %>

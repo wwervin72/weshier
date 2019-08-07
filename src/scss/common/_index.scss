@@ -1,0 +1,113 @@
+@keyframes loadingAni {
+    0% {
+        width: 55%;
+    }
+    50% {
+        width: 100%;
+    }
+    100% {
+        width: 55%;
+    }
+}
+
+.container {
+    width: 1080px;
+    margin: 25px auto;
+    .content,
+    .sidebar {
+        float: left;
+    }
+    .content {
+        width: 66.67%;
+    }
+    .sidebar {
+        margin-left: 3.33%;
+        width: 30%;
+    }
+}
+
+.ws_close {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+    margin: auto;
+    cursor: pointer;
+    &:hover {
+        opacity: .5;
+    }
+}
+
+.ws_msg {
+    display: flex;
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    &.ws_msg_error {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+    .msg_list {
+        flex: 1;
+    }
+    .msg_close {
+        flex: 0 0 20px;
+        width: 20px;
+        text-align: center;
+    }
+}
+.loading_ani {
+    margin-top: 20px;
+    display: none;
+    overflow: hidden;
+    .loading_cnt {
+        float: left;
+        width: 100%;
+        padding-right: 300px;
+    }
+    .loading_avatar {
+        float: right;
+        width: 120px;
+        height: 130px;
+        margin-top: -130px;
+        border-radius: 4px;
+        background-color: #eaeaea;
+    }
+    .loading_title,
+    .loading_row {
+        border-radius: 2px;
+    }
+    .loading_title {
+        width: 40%;
+        height: 20px;
+        margin: 0 0 15px;
+        background-color: #eaeaea;
+    }
+    .loading_row {
+        width: 100%;
+        height: 16px;
+        margin: 0 0 10px;
+        background-color: #eaeaea;
+        animation: loadingAni 1.5s ease-in-out infinite;
+    }
+    .loading_delay {
+        animation-delay: -0.5s;
+    }
+    .loading_delay_last {
+        animation-delay: -0.3s;
+    }
+    .loading_author,
+    .loading_createAt,
+    .loading_heart,
+    .loading_comment {
+        display: inline-block;
+        width: 30px;
+        height: 15px;
+        margin-right: 3px;
+        background-color: #eaeaea;
+    }
+}

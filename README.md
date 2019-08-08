@@ -2,13 +2,13 @@
 
 [线上地址](http://129.204.39.6/)
 
-#### run
+### run
 
 1. 首先需要安装本地 nodejs 环境， redis 以及 mysql
 2. 下载依赖包 yarn install
 3. 运行 npm start
 
-#### 网站部分页面
+### 网站部分页面
 <div align=center>
 	<img width="100%" src="https://github.com/wwervin72/weshier/blob/master/public/image/screenShot/%E6%B3%A8%E5%86%8C.png?raw=true"/>
 	<span>注册界面</span>
@@ -46,7 +46,7 @@
 	<span>编辑器界面</span>
 </div>
 
-#### 有好的建议？
+### 有好的建议？
 
 [欢迎留言](http://129.204.39.6/message/leave)
 

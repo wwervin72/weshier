@@ -149,7 +149,7 @@ module.exports = (sequelize, DataTypes) => {
 				let html = await renderArticleListHtml(list, user)
 				return {
 					html,
-					hasMore: params.limit ? list.length == params.limit : true
+					hasMore: params && params.limit ? list.length == params.limit : true
 				}
 			})
 			.catch(err => Promise.reject(err))

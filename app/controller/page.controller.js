@@ -21,7 +21,7 @@ exports.notFound = function (req, res, next) {
 	}, 404)
 }
 
-exports.serverError = function (error, req, res, next) {
+exports.serverError = function (err, req, res, next) {
 	if (err.message
 		&& (~err.message.indexOf('not found')
 		|| (~err.message.indexOf('Cast to ObjectId failed')))) {

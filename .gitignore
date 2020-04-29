@@ -8,3 +8,4 @@ ecosystem.config.js
 data/
 app/view/
 log/*
+./yarn-error.log

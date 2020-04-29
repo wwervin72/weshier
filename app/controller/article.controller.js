@@ -58,7 +58,8 @@ exports.updateArticle = function (req, res, next) {
 	models.Article.update(req.body, {
 		where: {
 			id: req.body.id,
-			article_author: req.user.id
+			article_author: req.user.id,
+			deletedAt: null
 		}
 	}).then(result => {
 		let status = result[0] >= 1

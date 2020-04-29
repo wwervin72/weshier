@@ -1,8 +1,0 @@
-@import './common/_reset.scss';
-@import './common/_header.scss';
-@import './common/_footer.scss';
-@import './common/_common.scss';
-
-.side_tools {
-	@include sideTool();
-}

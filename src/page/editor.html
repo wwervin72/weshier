@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<%- include('./common/meta.html') %>
+	<%- include('./common/iconfont.html') %>
+    <title><%= article ? article.title : '编辑器' %> - 微识</title>
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_915384_bbs99hf50a.css">
+	<link rel="stylesheet" href="/assets/lib/editor.md/css/editormd.min.css">
+	<link rel="stylesheet" href="/assets/static/css/editor.css">
+</head>
+<body>
+	<%- include('./common/header.html') %>
+    <div class="ws_editor">
+		<div id="editor">
+			<textarea style="display:none;"><%= article ? article.content : '' %></textarea>
+		</div>
+		<div class="article_options">
+			<div class="article_title option">
+				<input type="text" name="title" class="title_ipt" autocomplete="off" id="title_ipt"
+					placeholder="文章标题" value="<%= article && article.title ? article.title : '' %>"/>
+			</div>
+			<!-- 文章标签 -->
+			<div class="option tags" id="tag">
+				<label>
+					文章标签：
+					<% if (article && article.tags){ %>
+						<% article.tags.forEach(function (tag) { %>
+							<button class="tag"><%= tag.name %><span class="remove_item remove_tag">×</span></button>
+						<% }) %>
+					<% } %>
+					<input type="text" name="tag" id="tag_ipt" class="tag_ipt" placeholder="添加标签" autocomplete="off">
+				</label>
+			</div>
+			<!-- 文章密码 -->
+			<div class="option">
+				<label>
+					文章密码：
+					<input type="password" name="password" id="pwd_ipt" class="tag_ipt" autocomplete="off"
+						placeholder="文章密码" value="<%= article && article.password ? article.password : '' %>">
+				</label>
+			</div>
+			<!-- 是否开启评论 -->
+			<div class="cmt_conf option">
+				是否开启评论：
+				<label>
+					<input name="allow_comment" type="radio" value="1" hidden
+						<%= !article || article.allow_comment == 1 ? "checked" : "" %>/>
+					<i class="simulate_radio"></i>
+					<span class="allow_cmt_label">开启</span>
+				</label>
+				<label>
+					<input name="allow_comment" type="radio" value="0" hidden
+						<%= article && article.allow_comment == 0 ? "checked" : "" %>/>
+					<i class="simulate_radio"></i>
+					<span class="allow_cmt_label">不开启</span>
+				</label>
+			</div>
+			<!-- 选择分类目录 -->
+			<div class="option">
+				<label>
+					分类目录：
+					<select name="category" id="category" value="<%= article && article.article_category %>">
+						<option value="">--请选择分类目录--</option>
+						<% category && category.forEach(function (cate) { %>
+							<option value="<%= cate.id %>" <%= article && article.article_category === cate.id ? "selected" : "" %>>
+								<%= cate.name %>
+							</option>
+						<% }) %>
+					</select>
+				</label>
+			</div>
+			<!-- 缩略图 -->
+			<div class="option">
+				<label>
+					缩略图：
+					<div class="thumbnail">
+						<img id="thumbnail_img" src="<%= article && article.thumbnail ? article.thumbnail : '/assets/image/thumbnail.jpg' %>" width="100%" alt="" class="thumbnail_img">
+						<span class="ws_iconfont ws_tupian select_tb"></span>
+						<span class="ws_iconfont ws_shanchu del_tb"></span>
+					</div>
+				</label>
+			</div>
+
+		</div>
+	</div>
+	<div class="dialog" id="select_tb_dialog">
+		<div class="content">
+			<div class="dialog_header">
+				<div class="close">X</div>
+				<div class="title">选择缩略图</div>
+			</div>
+			<div class="dialog_body">
+				<% annex && annex.forEach(function (el) { %>
+					<img src="<%= el.path %>" class="annex" width="100" height="100"
+						title="<%= el.desc %>">
+				<% }) %>
+			</div>
+		</div>
+	</div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/assets/lib/editor.md/editormd.min.js"></script>
+	<script src="/assets/static/js/editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+	"rest-client.environmentVariables": {
+		"$shared": {},
+		"development": {
+			"baseURL": "http://localhost:3000"
+		}
+	}
+}

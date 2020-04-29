@@ -1,0 +1,28 @@
+@import './common/_reset.scss';
+@import './common/_header.scss';
+@import './common/footer';
+@import './common/variables';
+
+.ws_exception {
+	margin: 10vh auto;
+	text-align: center;
+	.ws_not_found,
+	.ws_no_permission,
+	.ws_error {
+		display: inline-block;
+		width: 177px;
+		height: 90px;
+	}
+	.ws_not_found {
+		background: url('./../image/exception/not_found.png') 0  no-repeat;
+	}
+	.ws_no_permission {
+		background: url('./../image/exception/no_permission.png') 0  no-repeat;
+	}
+	.ws_error {
+		background: url('./../image/exception/error.png') 0  no-repeat;
+	}
+	.exception_tip {
+		color: $grayColor;
+	}
+}

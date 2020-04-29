@@ -1,0 +1,160 @@
+@import './_variables.scss';
+@import './_mixins.scss';
+
+.ws_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $headerHeight;
+    border-bottom: 1px solid #ddd;
+    background-color: $bgColor;
+    z-index: 1000;
+    &.slide_down {
+		@include headerBoxShadow();
+    }
+}
+
+.logo {
+    @include logo;
+}
+
+.ws_gerenzhuye,
+.ws_setting,
+.ws_tuichu {
+	&::after {
+		margin-left: 10px;
+	}
+}
+
+.ws_gerenzhuye::after {
+	content: '主页';
+}
+.ws_setting::after {
+	content: '设置';
+}
+.ws_tuichu::after {
+	content: '退出';
+}
+
+.ws_header_content {
+    display: flex;
+	width: 100%;
+    max-width: $headerMaxWidth;
+    margin: 0 auto;
+    .logo {
+        flex: 0 0 100px;
+        margin-top: 2.5px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .user_area {
+		flex: 1;
+		text-align: right;
+	}
+	.ws_caidan {
+		line-height: $headerHeight;
+		display: none;
+		cursor: pointer;
+		padding: 0 10px;
+	}
+    .user_right {
+		display: inline-block;
+		font-size: 0;
+        & > a,
+        & > .user_dropdown {
+            display: inline-block;
+            height: 49px;
+            line-height: 49px;
+            padding: 0 15px;
+            transition: color ease-in .3s;
+            font-size: 14px;
+            cursor: pointer;
+            &:hover {
+                color: $highLightColor;
+            }
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+    }
+    .user_dropdown {
+        position: relative;
+        &:hover {
+            .dropdown {
+                display: block;
+            }
+        }
+        .dropdown {
+			position: absolute;
+            min-width: 150%;
+            top: 49px;
+            right: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,.1);
+            padding: 10px 0;
+			z-index: 100;
+			display: none;
+            background-color: #fff;
+            a {
+				display: block;
+                height: 36px;
+                line-height: 36px;
+				text-align: left;
+                padding: 0 10px;
+                &:hover {
+                    background-color: #f1f1f1;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $headerMaxWidth) {
+	.ws_header {
+		.logo {
+			margin-left: 15px;
+		}
+		.ws_caidan {
+			margin-right: 15px;
+		}
+	}
+}
+
+@media screen and (max-width: $screenMinWidth) {
+	.ws_header {
+		.user_area {
+			display: none;
+		}
+		.ws_header_content {
+			font-size: 0;
+			display: block;
+			.user_area {
+				width: 100%;
+				background-color: $bgColor;
+			}
+			.user_right {
+				width: 100%;
+				text-align: right;
+			}
+			.ws_caidan {
+				float: right;
+				display: block;
+			}
+		}
+	}
+	.show_user_menu{
+		border-bottom: none;
+		&.slide_down {
+			box-shadow: none;
+		}
+		.user_area {
+			display: block;
+		}
+		.user_right {
+			border-bottom: 1px solid #ddd;
+		}
+	}
+}

@@ -1,0 +1,76 @@
+@import './_variables.scss';
+
+body, div, ul, li, ol, dl, dt, dd, form, input, button, select, h1, h2, h3, h4, h5, h6, span, strong, s, i, a, textarea, p,
+footer, nav, article {
+    margin: 0;
+    padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+    font: $normalFontSize '-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif';
+    color: $fontColor;
+    padding-top: $headerHeight;
+	background-color: $bgColor;
+	line-height: 1.5;
+	font-weight: normal;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: $fontColor;
+}
+
+input, button, textarea, select {
+	border: 1px solid $borderColor;
+	background-color: transparent;
+	outline: 0;
+	font-size: inherit;
+	&:focus {
+		border-color: $highLightColor;
+	}
+	&:hover {
+		border-color: #c0c4cc;
+	}
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder  {
+	color: $placeholdeColor !important;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+	color: $placeholdeColor !important;
+}
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+	color: $placeholdeColor !important;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+	color: $placeholdeColor !important;
+}
+
+body ::-webkit-scrollbar-button, html ::-webkit-scrollbar-button{
+	display: none;
+}
+body ::-webkit-scrollbar, html ::-webkit-scrollbar{
+	width: 6px;
+    height: 6px;
+}
+body ::-webkit-scrollbar-thumb,
+html ::-webkit-scrollbar-thumb{
+	background-color: rgba(144,147,153,.3);
+	border-radius: 3px;
+	cursor: pointer;
+	&:hover {
+		background-color: rgba(144,147,153,1);
+	}
+}
+body ::-webkit-scrollbar-track, html ::-webkit-scrollbar-track{
+	background-color: transparent;
+}

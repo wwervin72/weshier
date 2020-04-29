@@ -1,0 +1,112 @@
+.loading_ani,
+.article {
+	padding: 20px 20px 10px 20px;
+    margin-bottom: 20px;
+}
+.article {
+	margin-bottom: 10px;
+	&:hover {
+		.edit_article,
+		.del_article {
+			display: block;
+		}
+	}
+    .content {
+		overflow: hidden;
+    }
+	.avatar {
+		float: right;
+		font-size: 0;
+		img {
+			width: 120px;
+			height: 120px;
+			border-radius: 4px;
+			transition: all .6s ease;
+			&:hover {
+				transform: scale(1.11)
+			}
+		}
+	}
+    .abstract {
+        height: 96px;
+        line-height: 24px;
+		margin-top: 5px;
+		padding-right: 5px;
+        overflow: hidden;
+        color: $fontColor;
+    }
+    .title {
+        position: relative;
+        font-size: 18px;
+        font-weight: 700;
+        color: #555;
+        transition: all ease-in-out .3s;
+        &::before {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 1px;
+            bottom: 0;
+            background-color: #337ab7;
+            transform: scaleX(0);
+            transform-origin: 50% 0;
+            transition: transform .3s ease-in-out;
+        }
+        &:visited {
+            color: $shallowColor;
+        }
+        &:hover {
+            color: $highLightColor;
+            &::before {
+                transform: scale(1);
+            }
+        }
+    }
+    .base_info {
+		margin-top: 5px;
+		&, a {
+			color: $grayColor;
+			&:not(.right) {
+				font-size: 12px;
+			}
+		}
+	}
+	.edit_article,
+	.del_article {
+		margin-left: 5px;
+		display: none;
+	}
+    .heart_num,
+    .comment_num {
+        margin-left: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        &::before {
+			margin-right: 2px;
+			vertical-align: middle;
+        }
+	}
+	.heart_num::before {
+		font-size: 15px;
+	}
+    .heart_num,
+    .comment_num,
+    .alias_update {
+        transition: color .3s ease-in-out;
+        &:hover,
+        a:hover {
+            color: $fontColor;
+		}
+		&.heart_num:hover {
+			color: $pinkColor;
+		}
+    }
+}
+
+@media screen and (max-width: $screenMinWidth) {
+	.article .avatar img {
+		margin-top: 30px;
+		width: 90px;
+		height: 90px;
+	}
+}

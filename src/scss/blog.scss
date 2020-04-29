@@ -1,0 +1,53 @@
+@import './common/_reset.scss';
+@import './common/_header.scss';
+@import './common/_footer.scss';
+@import './common/_article.list.scss';
+@import './common/_common.scss';
+
+
+.container {
+	overflow: hidden;
+	@include container;
+}
+
+.cnt_main {
+	width: 66.67%;
+	float: left;
+}
+
+.aside {
+	width: 30%;
+	float: right;
+}
+
+@media screen and (max-width: 1080px) {
+	.cnt_main,
+	.aside {
+		float: none;
+		width: 100%;
+	}
+	.aside {
+		display: none;
+	}
+}
+
+#weather-view-he {
+	width: 100% !important;
+	border: none !important;
+	border-radius: 0 !important;
+}
+.clock_wrap {
+	padding: 10px;
+	margin: 10px 0;
+}
+#clock {
+	position: relative;
+}
+#needles {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.side_tools {
+	@include sideTool();
+}

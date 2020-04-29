@@ -1,0 +1,10 @@
+.git/*
+node_modules/
+config/env/development.js
+config/env/production.js
+public/static/
+public/upload/
+ecosystem.config.js
+data/
+app/view/
+log/*

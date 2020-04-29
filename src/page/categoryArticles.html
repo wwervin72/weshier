@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<%- include('./common/meta.html') %>
+	<link rel="stylesheet" href="/assets/static/css/tagArticles.css">
+	<%- include('./common/iconfont.html') %>
+	<title><%= data.User.nickName %> - <%= data.name %> - 微识</title>
+</head>
+<body>
+	<%- include('./common/header.html') %>
+	<article class="container article_list" id="article_list">
+		<%- include('./common/article.list.html', {
+			articles: data.Articles.map(el => {
+				el.User = data.User
+				return el
+			})
+		}) %>
+	</article>
+
+	<%- include('./common/sideTool.html', {
+		heart: false,
+catelog: false
+	}) %>
+	<%- include('./common/footer.html') %>
+</body>
+</html>

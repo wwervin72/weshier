@@ -26,12 +26,9 @@
 			<div class="option tags" id="tag">
 				<label>
 					文章标签：
-					<% if (article && article.tags){ %>
-						<% article.tags.forEach(function (tag) { %>
-							<button class="tag"><%= tag.name %><span class="remove_item remove_tag">×</span></button>
-						<% }) %>
-					<% } %>
-					<input type="text" name="tag" id="tag_ipt" class="tag_ipt" placeholder="添加标签" autocomplete="off">
+					<% tags.forEach(function (tag) { %>
+						<button data-tag="<%= tag.id %>" class="tag <%= article && article.tags.findIndex(t => t.id === tag.id) !== -1 ? 'selected' : '' %>"><%= tag.name %><span data-tag="<%= tag.id %>" class="remove_item remove_tag">×</span></button>
+					<% }) %>
 				</label>
 			</div>
 			<!-- 文章密码 -->
@@ -102,6 +99,11 @@
 	</div>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script src="/assets/lib/editor.md/editormd.min.js"></script>
+	<script>
+		var userTags = JSON.parse('<%- JSON.stringify(tags) %>')
+		var articleId = <%- article && article.id %>
+		var articleTags = JSON.parse('<%- article ? JSON.stringify(article.tags.map(el => el.id)) : [] %>')
+	</script>
 	<script src="/assets/static/js/editor.js"></script>
 </body>
 </html>

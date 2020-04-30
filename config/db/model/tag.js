@@ -20,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'ws_tag',
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
+		deletedAt: 'deleted_at',
+		paranoid: true
 	});
 
 	Tag.associate = function (models) {
@@ -29,8 +31,16 @@ module.exports = (sequelize, DataTypes) => {
 		Tag.Article = Tag.belongsToMany(models.Article, {
 			as: 'articles',
 			through: 'ws_article_tag',
-			foreignKey: 'tag_article'
+			foreignKey: 'tag_id'
 		})
 	}
+
+	Tag.findUserTags = function (userId) {
+		return Tag.findAll({
+			where: {user: userId},
+			attributes: ['id', 'name', 'desc']
+		})
+	}
+
 	return Tag
 }

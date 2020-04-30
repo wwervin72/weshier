@@ -15,18 +15,7 @@ $(function() {
 	const categoryDom = document.querySelector('#category')
 	const thumbnailDom = document.querySelector('#thumbnail_img')
 
-	let articleId = window.location.pathname.match(/\/a\/edit\/(\d+)$/)
-	let tags = [], editor
-	if (articleId) {
-		articleId = articleId[1]
-		fetchArticle(articleId).then(res => {
-			if (res.status) {
-				tags = res.data.tags
-			} else {
-				alert(res.msg)
-			}
-		})
-	}
+	let tags = articleTags.slice(), editor
 
     const imageUploadFn = (files, cb, writeUrl) => {
         let data = new FormData()
@@ -136,32 +125,30 @@ $(function() {
         }
     })
 
-    const tagIpt = $('#tag_ipt')
-    tagIpt.on('keypress', evt => {
-        const val = tagIpt.val()
-        // 最多十个tags
-        if (evt.keyCode === 13 && val && !tags.includes(val)) {
-            if (tags.length >= 10) return alert('最多十个标签')
-            tags.push(val)
-            tagIpt.before(`<button class="tag">${val}<span class="remove_item remove_tag">×</span></button>`)
-            tagIpt.val('')
-        }
-    })
-
+	const tagActive = 'selected'
     $('#tag').on('click', evt => {
+		evt.stopPropagation()
         const target = evt.target
-        if (target.matches('.remove_tag')) {
-			evt.stopPropagation()
-            const parent = target.parentNode
-            const val = parent.innerText.slice(0, -1)
-            const idx = tags.indexOf(val)
-            if (~idx) {
+		const t = target.dataset.tag - 0
+		const idx = tags.indexOf(t)
+        if (target.matches('.tag')) {
+			if (idx !== -1) {
+				if (!target.classList.contains(tagActive)) {
+					target.classList.add(tagActive)
+				}
+			} else {
+				tags.push(t)
+				target.classList.add(tagActive)
+			}
+        } else if (target.matches('.remove_tag')) {
+			let parent = target.parentNode
+            if (idx !== -1) {
                 tags.splice(idx, 1)
-                parent.remove()
-            }
-            return
+				parent.classList.remove(tagActive)
+            } else if (parent.classList.contains(tagActive)) {
+				parent.classList.remove(tagActive)
+			}
         }
-        tagIpt.focus()
 	})
 
 	let selectTbDialog = document.querySelector('#select_tb_dialog')

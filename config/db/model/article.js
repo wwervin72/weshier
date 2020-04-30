@@ -79,6 +79,7 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'ws_article',
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
+		deletedAt: 'deleted_at',
 		paranoid: true
 	})
 
@@ -96,10 +97,12 @@ module.exports = (sequelize, DataTypes) => {
 		Article.Comment = Article.hasMany(models.Comment, {
 			foreignKey: 'comment_article'
 		})
+		// 建议关联关系之后，Post会自动添加addTags、getTags、setTags方法。
+		// Tag会自动添加addPosts、getPosts、setPosts方法。
 		Article.Tag = Article.belongsToMany(models.Tag, {
 			as: 'tags',
 			through: 'ws_article_tag',
-			foreignKey: 'article_tag'
+			foreignKey: 'article_id'
 		})
 	}
 
@@ -175,7 +178,8 @@ module.exports = (sequelize, DataTypes) => {
 				include: [
 					{
 						model: models.Tag,
-						as: 'tags'
+						as: 'tags',
+						attributes: ['id', 'name', 'desc'],
 					}
 				]
 			}).then(data => {

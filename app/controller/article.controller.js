@@ -15,10 +15,6 @@ exports.articleList = function (req, res, next) {
 exports.saveArticle = function (req, res, next) {
 	let data = req.body
 	data.article_author = req.user.id
-	data.tags = data.tags && data.tags.map(name => ({
-		name,
-		user: req.user.id
-	}))
 	if (data.category) {
 		data.categories = {
 			name: data.category,
@@ -29,10 +25,6 @@ exports.saveArticle = function (req, res, next) {
 		.Article
 		.create(data, {
 			include: [
-				{
-					association: models.Article.Tag,
-					as: 'tags'
-				},
 				models.Article.Category
 			],
 		})
@@ -40,6 +32,7 @@ exports.saveArticle = function (req, res, next) {
 			if (!article) {
 				return next()
 			}
+			article.setTags(data.tags)
 			return respond(res, respEntity(article, '文章创建成功'), 200)
 		})
 		.catch(err => {
@@ -55,16 +48,28 @@ exports.saveArticle = function (req, res, next) {
  * 更新
  */
 exports.updateArticle = function (req, res, next) {
-	models.Article.update(req.body, {
+	models.Article.findOne({
 		where: {
 			id: req.body.id,
-			article_author: req.user.id,
-			deletedAt: null
+			article_author: req.user.id
 		}
-	}).then(result => {
-		let status = result[0] >= 1
-		return respond(res, respEntity(req.body, status, '更新' + (status ? '成功' : '失败')), 200)
-	}).catch(err => next(err))
+	}).then(article => {
+		if(!article) {
+			next()
+		} else {
+			Promise.all([
+				article.setTags(req.body.tags),
+				article.update(req.body, {
+					where: {
+						id: req.body.id,
+						article_author: req.user.id
+					}
+				})
+			])
+			.then(([tagRes, result]) => respond(res, respEntity(req.body, true, '更新成功'), 200))
+			.catch(err => next(err))
+		}
+	})
 }
 
 /**

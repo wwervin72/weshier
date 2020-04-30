@@ -134,6 +134,8 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'ws_user',
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
+		deletedAt: 'deleted_at',
+		paranoid: true
 	})
 	User.prototype.encryptPassword = function (pwd, salt) {
 		if (!passWordReg.test(pwd)) return ''
@@ -162,12 +164,6 @@ module.exports = (sequelize, DataTypes) => {
 		})
 		User.Category = User.hasMany(models.Category, {
 			foreignKey: 'user'
-		})
-		User.Practice = User.hasMany(models.Practice, {
-			foreignKey: 'practice_author'
-		})
-		User.Code = User.hasMany(models.Code, {
-			foreignKey: 'code_author'
 		})
 		User.Replied = User.hasMany(models.Reply, {
 			foreignKey: 'reply_user'

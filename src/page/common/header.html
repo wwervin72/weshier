@@ -5,9 +5,6 @@
 		<div class="user_area">
 			<div class="user_right">
 				<a href="/blog">博文</a>
-				<% if (member) { %>
-					<a href="/practice/<%= member.userName %>">实验室</a>
-				<% } %>
 				<% if (user && user.provide === 'local'){ %>
 					<a href="/write">写点啥？</a>
 				<% } %>

@@ -122,7 +122,10 @@ input[name=allow_comment]:checked + .simulate_radio {
 }
 
 .tag {
-    @include listItem();
+	@include listItem();
+	&.selected {
+		border-color: $pinkColor;
+	}
 }
 
 .editormd-form label.editormd--avatar-label {

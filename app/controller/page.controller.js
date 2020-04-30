@@ -289,6 +289,7 @@ exports.article = function (req, res, next) {
  */
 exports.editor = function (req, res, next) {
 	Promise.all([
+		models.Tag.findUserTags(req.user.id),
 		models.Category.findAll({
 			where: {
 				user: req.user.id
@@ -300,7 +301,7 @@ exports.editor = function (req, res, next) {
 			}
 		})
 	]).then(result => {
-		let [ categories, annex ] = result
+		let [ tags, categories, annex ] = result
 		annex.forEach(el => {
 			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`
 		})
@@ -308,6 +309,7 @@ exports.editor = function (req, res, next) {
 			article: null,
 			articleStr: null,
 			category: categories,
+			tags,
 			annex
 		}, 'editor.html')
 	})
@@ -318,6 +320,7 @@ exports.editor = function (req, res, next) {
  */
 exports.editArticle = function (req, res, next) {
 	Promise.all([
+		models.Tag.findUserTags(req.user.id),
 		models.Article.queryArticleEditDetail(models, {
 			id: req.params.articleId,
 			status: "1",
@@ -334,7 +337,7 @@ exports.editArticle = function (req, res, next) {
 			}
 		})
 	]).then(result => {
-		let [article, categories, annex] = result
+		let [tags, article, categories, annex] = result
 		if (!article) {
 			return next()
 		}
@@ -345,6 +348,7 @@ exports.editArticle = function (req, res, next) {
 			article,
 			articleStr: null,
 			category: categories,
+			tags,
 			annex
 		}, 'editor.html')
 	}).catch(err => next(err))

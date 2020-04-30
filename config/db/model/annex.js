@@ -21,6 +21,8 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'ws_annex',
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
+		deletedAt: 'deleted_at',
+		paranoid: true
 	})
 
 	Annex.associate = function (models) {

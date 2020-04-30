@@ -56,7 +56,7 @@
 					<h3 class="title">标签</h3>
 					<% data.tags.forEach(tag => { %>
 						<a href="/u/<%= data.userName %>/tag/<%= tag.name %>" class="tag" target="_blank">
-							<%= tag.dataValues.name + '(' + tag.dataValues.articleCount + ')' %>
+							<%= tag.dataValues.name + '(' + tag.articles.length + ')' %>
 						</a>
 					<% }) %>
 				</div>

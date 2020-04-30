@@ -101,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
 		// Tag会自动添加addPosts、getPosts、setPosts方法。
 		Article.Tag = Article.belongsToMany(models.Tag, {
 			as: 'tags',
-			through: 'ws_article_tag',
+			through: models.ArticleTag,
 			foreignKey: 'article_id'
 		})
 	}

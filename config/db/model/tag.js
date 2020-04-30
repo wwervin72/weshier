@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 		})
 		Tag.Article = Tag.belongsToMany(models.Article, {
 			as: 'articles',
-			through: 'ws_article_tag',
+			through: models.ArticleTag,
 			foreignKey: 'tag_id'
 		})
 	}

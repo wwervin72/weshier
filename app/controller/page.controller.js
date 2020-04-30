@@ -99,11 +99,23 @@ exports.userHomePage = function (req, res, next) {
 					where: {
 						user: user.id,
 					},
-					group: 'name',
 					attributes: [
-						'name',
-						[Sequelize.fn('COUNT', 'name'), "articleCount"]
+						'id',
+						'name'
 					],
+					include: [
+						{
+							model: models.Article,
+							as: 'articles',
+							through: {
+								group: 'tag_id',
+								attributes: [
+									'tag_id',
+									[Sequelize.fn('COUNT', 'article_id'), "articleCount"]
+								]
+							}
+						}
+					]
 				}),
 				models.Article.findAll({
 					where: {
@@ -132,7 +144,7 @@ exports.userHomePage = function (req, res, next) {
 				`)
 			]).then(results => {
 				user.articles = results[0]
-				user.tags = results[1]
+				user.tags = results[1].sort((a, b) => b.articles.length - a.articles.length)
 				user.categoryStatistic = results[2]
 				user.createMonthStatistic = results[3][0]
 				return user

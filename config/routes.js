@@ -1,4 +1,5 @@
 const express = require('express')
+const { checkSchema } = require('express-validator')
 const pageRouter = express.Router()
 const apiRouter = express.Router()
 
@@ -9,6 +10,7 @@ const articleCtrl = require('../app/controller/article.controller')
 const pageCtrl = require('../app/controller/page.controller')
 const annexCtrl = require('../app/controller/annex.controller')
 const { requireSignIn, verifyIsManager, verifyLocalAccount } = require('./middleware/authorization.js')
+const articleSchema = require('../app/schema/article')
 
 module.exports = function (app, passport) {
 	const pauth = passport.authenticate.bind(passport)
@@ -75,7 +77,7 @@ module.exports = function (app, passport) {
 	// 上传附件
 	apiRouter.post('/uploadAnnex', requireSignIn, verifyLocalAccount, annexCtrl.uploadAnnex)
 	// 保存文章
-	apiRouter.post('/article', requireSignIn, verifyLocalAccount, articleCtrl.saveArticle)
+	apiRouter.post('/article', requireSignIn, verifyLocalAccount, checkSchema(articleSchema.create), articleCtrl.saveArticle)
 	// 获取 emoji 面板html
 	apiRouter.get('/emoji/html', pageCtrl.generateEmojiPanelHtml)
 	// 获取文章详情
@@ -89,7 +91,7 @@ module.exports = function (app, passport) {
 	// 取消点赞文章
 	apiRouter.delete('/article/:articleId/heart', requireSignIn, articleCtrl.cancelHeartArticle)
 	// 更新文章
-	apiRouter.put('/article', requireSignIn, verifyLocalAccount, articleCtrl.updateArticle)
+	apiRouter.put('/article', requireSignIn, verifyLocalAccount, checkSchema(articleSchema.update), articleCtrl.updateArticle)
 	// 删除
 	apiRouter.delete('/article', requireSignIn, verifyLocalAccount, articleCtrl.delArticle)
 	// blog 文章分页

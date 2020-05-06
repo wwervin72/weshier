@@ -1,0 +1,16 @@
+#@name create
+
+POST {{baseURL}}{{contentPath}}/article HTTP/1.1
+
+{
+	"title": "test",
+	"allow_comment": true,
+	"content": "",
+	"abstract": "",
+	"password": "",
+	"thumbnail": "",
+	"category": "",
+	"tags": "",
+}
+
+###

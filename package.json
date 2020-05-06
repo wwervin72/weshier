@@ -27,6 +27,7 @@
 		"ejs": "^2.6.1",
 		"express": "^4.16.4",
 		"express-session": "^1.15.6",
+		"express-validator": "^6.4.1",
 		"express-winston": "^3.2.1",
 		"layui-src": "^2.5.4",
 		"method-override": "^3.0.0",

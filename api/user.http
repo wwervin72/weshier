@@ -1,0 +1,9 @@
+#@name create
+
+POST {{baseURL}}/register HTTP/1.1
+
+{
+	"user": ""
+}
+
+###

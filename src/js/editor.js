@@ -40,7 +40,7 @@ $(function() {
         const markdown = editor.getMarkdown()
 		const title = titleDom.value.trim()
 
-		if (!title) return alert('请输入标题')
+		// if (!title) return alert('请输入标题')
 		if (!markdown) return alert('请输入内容')
 		const password = pwdDom.value
 		// 分类

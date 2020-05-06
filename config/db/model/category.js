@@ -38,5 +38,15 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'article_category'
 		})
 	}
+
+	Category.findUserCategories = function (userId, options = {}) {
+		return Tag.findAll({
+			where: {
+				user: userId,
+				...options
+			},
+			attributes: ['id', 'name', 'desc']
+		})
+	}
 	return Category
 }

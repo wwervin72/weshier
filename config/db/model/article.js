@@ -168,6 +168,16 @@ module.exports = (sequelize, DataTypes) => {
 			.catch(err => Promise.reject(err))
 	}
 
+	Article.queryUserArticle = function (userId, articleId, attrs = ['id']) {
+		return Article.findOne({
+			where: {
+				article_author: userId,
+				id: articleId
+			},
+			attributes: attrs
+		})
+	}
+
 	Article.queryArticleEditDetail = function (models, params) {
 		return new Promise((resolve, reject) => {
 			models.Article.findOne({

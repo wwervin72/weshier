@@ -178,13 +178,20 @@ exports.setting = function (req, res, next) {
 				user: req.user.id,
 			}
 		}),
-	]).then(result => {
-		result[1].forEach(el => {
+		models.Tag.findAll({
+			where: {
+				user: req.user.id,
+			},
+			attributes: ['id', 'name', 'desc']
+		}),
+	]).then(([category, annex, tags]) => {
+		annex.forEach(el => {
 			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`
 		})
 		return respond(res, {
-			category: result[0],
-			annex: result[1]
+			category,
+			annex,
+			tags
 		}, 'setting.html')
 	}).catch(err => next(err))
 }

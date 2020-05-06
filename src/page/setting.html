@@ -125,7 +125,27 @@
 				</table>
 			</div>
 			<div id="blog_category_mg">
-				<h1>博客分类管理</h1>
+				<h1>标签管理</h1>
+				<table>
+					<tbody>
+						<tr>
+							<td>标签列表</td>
+							<td class="cate_list">
+								<% tags.forEach(function (tag) { %>
+									<%- include('./common/tag.html', {
+										tag: tag
+									}) %>
+								<% }) %>
+								<div id="add_tag" class="add_category">
+									<input type="text" placeholder="添加标签">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="blog_category_mg">
+				<h1>分类管理</h1>
 				<table>
 					<tbody>
 						<tr>

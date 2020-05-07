@@ -62,7 +62,6 @@ heartArticleBtn.onclick = function (evt) {
 				heartArticleStatistic.innerHTML = res.data.heart_count
 				heartArticleStatistic.classList.add("hide")
 			}
-			message(res.msg)
 		})
 	} else {
 		heartArticle(articleId).then(res => {
@@ -72,7 +71,6 @@ heartArticleBtn.onclick = function (evt) {
 				heartArticleStatistic.innerHTML = res.data.heart_count
 				heartArticleStatistic.classList.remove("hide")
 			}
-			message(res.msg)
 		}).catch(e => {})
 	}
 }

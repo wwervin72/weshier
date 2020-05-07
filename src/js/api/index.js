@@ -145,6 +145,21 @@ export function delCategory(data) {
 	})
 }
 
+export function createTag(data) {
+	return request({
+		url: `/tag`,
+		method: 'post',
+		data
+	})
+}
+export function delTag(data) {
+	return request({
+		url: `/tag`,
+		method: 'delete',
+		data
+	})
+}
+
 export function updateIndividualInfo(data) {
 	return request({
 		url: `/personal/info`,

@@ -134,7 +134,7 @@ exports.createCategory = function (req, res, next) {
 			name
 		}).then(category => {
 			if (category) {
-				return renderCategoryHtml(category.name, req.user).then(html => {
+				return renderCategoryHtml(category, req.user).then(html => {
 					return respond(res, respEntity({
 						category,
 						html

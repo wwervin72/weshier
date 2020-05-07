@@ -16,7 +16,14 @@ instance.interceptors.response.use(res => {
 		sessionStorage.setItem(redirectUrlKey, window.location.href)
 		window.location.href = '/login'
 	}
-	return Promise.resolve(res.data)
+	if (res.data.msg) {
+		alert(res.data.msg)
+	}
+	if (res.status === 200) {
+		return Promise.resolve(res.data)
+	} else {
+		return Promise.reject(res.data)
+	}
 }, error => {
 	return Promise.reject(error)
 })

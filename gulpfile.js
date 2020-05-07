@@ -154,16 +154,16 @@ gulp.task("image", () => {
 			})
 		)
 		.pipe(cached("image-task"))
-		.pipe(
-			imagemin([
-				imagemin.gifsicle({ interlaced: true }),
-				imagemin.jpegtran({ progressive: true }),
-				imagemin.optipng({ optimizationLevel: 5 }),
-				imagemin.svgo({
-					plugins: [{ removeViewBox: true }, { cleanupIDs: false }],
-				}),
-			])
-		)
+		// .pipe(
+		// 	imagemin([
+		// 		imagemin.gifsicle({ interlaced: true }),
+		// 		imagemin.jpegtran({ progressive: true }),
+		// 		imagemin.optipng({ optimizationLevel: 5 }),
+		// 		imagemin.svgo({
+		// 			plugins: [{ removeViewBox: true }, { cleanupIDs: false }],
+		// 		}),
+		// 	])
+		// )
 		.pipe(debug({ title: "image" }))
 		.pipe(remember("image-task"))
 		.pipe(size({ title: "image" }))

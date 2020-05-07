@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator')
 const models = require('../../config/db/model')
-const { renderCommentListHtml, respond, respEntity } = require('../utils/index')
+const { renderCommentListHtml, respond, respEntity, validateRequestEntity } = require('../utils/index')
 const sequelize = models.sequelize
 
 /**
@@ -14,9 +14,8 @@ exports.articleList = function (req, res, next) {
  * 保存文章
  */
 exports.saveArticle = function (req, res, next) {
-	const validatorResult = validationResult(req)
-	if (!validatorResult.isEmpty()) {
-		return respond(res, respEntity(null, 422, validatorResult.errors.map(err => err.msg).join(',')), 422)
+	if (!validateRequestEntity({req, res})) {
+		return
 	}
 	let data = req.body
 	data.article_author = req.user.id
@@ -53,9 +52,8 @@ exports.saveArticle = function (req, res, next) {
  * 更新
  */
 exports.updateArticle = function (req, res, next) {
-	const validatorResult = validationResult(req)
-	if (!validatorResult.isEmpty()) {
-		return respond(res, respEntity(null, 422, validatorResult.errors.map(err => err.msg).join(',')), 422)
+	if (!validateRequestEntity({req, res})) {
+		return
 	}
 	models.Article.findOne({
 		where: {

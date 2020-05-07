@@ -1,6 +1,6 @@
 <span class="cate_item">
-	<a href="/u/<%= user.userName %>/category/<%= categoryName %>" target="_blank">
-		<%= categoryName %>
+	<a href="/u/<%= user.userName %>/category/<%= category.name %>" target="_blank">
+		<%= category.name %>
 	</a>
-	<span class="remove_item remove_cate">×</span>
+	<span class="remove_item remove_cate" data-id="<%= category.id%>" data-name="<%= category.name%>">×</span>
 </span>

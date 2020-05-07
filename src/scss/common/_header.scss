@@ -73,7 +73,10 @@
             &:hover {
                 color: $highLightColor;
             }
-        }
+			&.ws_git {
+				font-size: 20px;
+			}
+		}
         .avatar {
             width: 36px;
             height: 36px;

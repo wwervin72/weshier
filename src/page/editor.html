@@ -100,14 +100,14 @@
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script src="/assets/lib/editor.md/editormd.min.js"></script>
 	<script>
-		var userTags = '<%- JSON.stringify(tags) %>'
-		var articleTags = '<%- (article && JSON.stringify(article.tags.map(el => el.id))) %>'
-		var articleId = '<%- article && article.id %>'
-		userTags = userTags ? JSON.parse(userTags) : []
-		articleTags = articleTags ? JSON.parse(articleTags) : []
+		var userTags = '<%- JSON.stringify(tags) %>';
+		var articleTags = '<%- (article && JSON.stringify(article.tags.map(el => el.id))) %>';
+		var articleId = '<%- article && article.id %>';
+		userTags = userTags ? JSON.parse(userTags) : [];
+		articleTags = articleTags ? JSON.parse(articleTags) : [];
 
 		if (articleId) {
-			articleId = articleId - 0
+			articleId = articleId - 0;
 		}
 
 	</script>

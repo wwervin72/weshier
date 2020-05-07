@@ -9,8 +9,11 @@ const userCtrl = require('../app/controller/user.controller')
 const articleCtrl = require('../app/controller/article.controller')
 const pageCtrl = require('../app/controller/page.controller')
 const annexCtrl = require('../app/controller/annex.controller')
+const tagCtrl = require('../app/controller/tag.controller')
+const categoryCtrl = require('../app/controller/category.controller')
 const { requireSignIn, verifyIsManager, verifyLocalAccount } = require('./middleware/authorization.js')
 const articleSchema = require('../app/schema/article')
+const tagSchema = require('../app/schema/tag')
 
 module.exports = function (app, passport) {
 	const pauth = passport.authenticate.bind(passport)
@@ -102,12 +105,17 @@ module.exports = function (app, passport) {
 	apiRouter.get('/register/authCode', userCtrl.sendRegisterAuthcodeEmail)
 	// 注册
 	apiRouter.post('/register', userCtrl.register)
+
 	// 根据用户 id 获取用户分类目录
 	apiRouter.get('/category', requireSignIn, verifyLocalAccount, userCtrl.queryUserCategory)
 	// 创建分类目录
 	apiRouter.post('/category', requireSignIn, verifyLocalAccount, userCtrl.createCategory)
 	// 删除分类目录
-	apiRouter.delete('/category', requireSignIn, verifyLocalAccount, userCtrl.delCategory)
+	apiRouter.delete('/category', requireSignIn, verifyLocalAccount, categoryCtrl.delete)
+
+	apiRouter.post('/tag', requireSignIn, verifyLocalAccount, checkSchema(tagSchema.create), tagCtrl.create)
+	apiRouter.delete('/tag', requireSignIn, verifyLocalAccount, tagCtrl.delete)
+
 	// 用户留言
 	apiRouter.post('/message/leave', requireSignIn, userCtrl.leaveMsg)
 	// 获取留言列表

@@ -1,20 +1,8 @@
 import { copySiteInfo, addEvent, switchBrowserTabs, addHeaderScrollListener, bindGoTopEvent,
 	switchUserMenu, autoCloseHeaderMenu } from './utils'
 import { api } from './api/url'
-import { fetchUserCategoryList, createCategory, delCategory, updateIndividualInfo } from './api/index'
+import { createCategory, delCategory, updateIndividualInfo, createTag, delTag } from './api/index'
 import './utils/upload'
-
-addEvent(document.querySelector('.cate_list'), 'click', '.remove_cate', function (event) {
-	event.stopPropagation();
-})
-
-let categoryList
-fetchUserCategoryList().then(res => {
-	if (res.status) {
-		categoryList = res.data
-	}
-})
-
 
 $('#upload_annex').uploadfile({
 	url : api + 'uploadAnnex',
@@ -52,8 +40,10 @@ addEvent(document.querySelector('input[name=avatar]'), 'change', function (event
 	})
 })
 
+// 分类相关
 const addCategoryIpt = document.querySelector('#add_category input')
 const cateListDom = document.querySelector('.cate_list')
+// 添加分类
 addEvent(addCategoryIpt, 'keyup', evt => {
 	if (evt.keyCode === 13) {
 		let categoryName = addCategoryIpt.value
@@ -68,27 +58,62 @@ addEvent(addCategoryIpt, 'keyup', evt => {
 			if (res.status) {
 				addCategoryIpt.value = ''
 				categoryList.push(res.data.category)
-				let div = document.createElement('div')
-				div.innerHTML = res.data.html
-				cateListDom.insertBefore(div.children[0], addCategoryIpt.parentNode)
+				addCategoryIpt.parentNode.insertAdjacentHTML('beforebegin', res.data.html)
 			} else {
 				alert(res.msg)
 			}
 		})
 	}
 })
-
-addEvent(cateListDom, 'click', '.cate_list .remove_cate', evt => {
+// 删除分类
+addEvent(cateListDom, 'click', '.cate_list .remove_item', evt => {
 	if (window.confirm('确认删除该分类？')) {
 		let target = evt.target
-		let name = target.previousElementSibling.innerHTML.trim()
+		let id = target.dataset.id
 		delCategory({
-			name
+			id
 		}).then(res => {
 			if (res.status) {
 				cateListDom.removeChild(target.parentNode)
 			}
-			alert(res.msg)
+		})
+	}
+})
+
+// tag 相关
+const addTagIpt = document.querySelector('#add_tag input')
+const tagListDom = document.querySelector('.tag_list')
+// 添加标签
+addEvent(addTagIpt, 'keyup', evt => {
+	if (evt.keyCode === 13) {
+		let tagName = addTagIpt.value
+		if (!tagName) return
+		if (tags.some(el => el.name === tagName)) {
+			alert('该标签名已存在，请重新输入')
+			return
+		}
+		createTag({
+			name: tagName
+		}).then(res => {
+			if (res.status) {
+				addTagIpt.value = ''
+				tags.push(res.data.tag)
+				addTagIpt.parentNode.insertAdjacentHTML('beforebegin', res.data.html)
+			}
+		})
+	}
+})
+// 删除标签
+addEvent(tagListDom, 'click', '.tag_list .remove_item', evt => {
+	if (window.confirm('确认删除该标签')) {
+		let target = evt.target
+		let id = target.dataset.id
+		delTag({
+			id,
+		}).then(res => {
+			if (res.status) {
+				tagListDom.removeChild(target.parentNode)
+			}
 		})
 	}
 })

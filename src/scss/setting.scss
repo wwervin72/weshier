@@ -69,10 +69,10 @@ table {
 		width: 150px;
 	}
 }
-.cate_list {
+.cate_list, .tag_list {
 	white-space: normal;
 }
-.cate_item {
+.cate_item, .tag_item {
 	margin: 10px;
 	vertical-align: middle;
 	@include listItem();

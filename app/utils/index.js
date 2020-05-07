@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const ejs = require('ejs')
+const { validationResult } = require('express-validator')
 
 class RespEntity {
 	constructor (status = true, data, msg) {
@@ -36,6 +37,15 @@ exports.respond = function (res, data, tpl, status) {
 			return res.status(406).send('无法接受');
 		}
 	});
+}
+
+exports.validateRequestEntity = function ({req, res}) {
+	const validatorResult = validationResult(req)
+	let result = validatorResult.isEmpty()
+	if (!result) {
+		exports.respond(res, exports.respEntity(null, 422, validatorResult.errors.map(err => err.msg).join(',')), 422)
+	}
+	return result
 }
 
 exports.respondOrRedirect = function ({ req, res }, url = '/', obj = {}, status = 200) {
@@ -146,11 +156,20 @@ exports.renderArticleListHtml = function (articles, user) {
 	)
 }
 
-exports.renderCategoryHtml = function (categoryName, user) {
+exports.renderCategoryHtml = function (category, user) {
 	return ejs.renderFile(
 		path.join(__dirname, '../../', process.env.VIEW_PATH, 'common/category.html'),
 		{
-			categoryName, user
+			category, user
+		}
+	)
+}
+
+exports.renderTagHtml = function (tag, user) {
+	return ejs.renderFile(
+		path.join(__dirname, '../../', process.env.VIEW_PATH, 'common/tag.html'),
+		{
+			tag, user
 		}
 	)
 }

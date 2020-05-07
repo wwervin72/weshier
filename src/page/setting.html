@@ -124,13 +124,13 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="blog_category_mg">
+			<div id="blog_tag_mg">
 				<h1>标签管理</h1>
 				<table>
 					<tbody>
 						<tr>
 							<td>标签列表</td>
-							<td class="cate_list">
+							<td class="tag_list">
 								<% tags.forEach(function (tag) { %>
 									<%- include('./common/tag.html', {
 										tag: tag
@@ -153,7 +153,7 @@
 							<td class="cate_list">
 								<% category.forEach(function (cate) { %>
 									<%- include('./common/category.html', {
-										categoryName: cate.name
+										category: cate
 									}) %>
 								<% }) %>
 								<div id="add_category" class="add_category">
@@ -172,6 +172,12 @@
 		catelog: false
 	}) %>
 	<%- include('./common/footer.html') %>
+	<script>
+		var tags = '<%- JSON.stringify(tags) %>';
+		tags = tags ? JSON.parse(tags) : [];
+		var categoryList = '<%- JSON.stringify(category) %>';
+		categoryList = categoryList ? JSON.parse(categoryList) : [];
+	</script>
 	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
 	<script src="/assets/static/js/setting.js"></script>

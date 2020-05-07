@@ -77,7 +77,6 @@ $(function() {
 			p = saveArticle(saveEntity)
 		}
         p.then(res => {
-			alert(res.msg)
             if (res.status) {
                 window.location.href = `/a/${res.data.id}`
             }

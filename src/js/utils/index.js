@@ -3,6 +3,19 @@ import EFireWorks from './fireWork'
 
 export const redirectUrlKey = 'originalUrl'
 
+const msgOption = {
+	timeOut: 2500
+}
+export function message(msg, type = 'success', option = {}) {
+	if (window.toastr) {
+		window.toastr.options = {
+			...msgOption,
+			...option
+		}
+		window.toastr[type](msg)
+	}
+}
+
 // 判断渲染模式是不是标准模式
 export const isCSS1Compat = (document.compatMode || "") === "CSS1Compat"
 

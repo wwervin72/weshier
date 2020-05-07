@@ -1,3 +1,5 @@
+import { message } from "./index";
+
 ;(function ($, undefined) {
 	$.fn.uploadfile = function (setting) {
 		var defaultSetting = {
@@ -17,7 +19,7 @@
 
 		//判断浏览器是否支持FileReader
 		if(!window.FileReader){
-			alert('您的浏览器不支持FileReader，请更换浏览器。');
+			message('您的浏览器不支持FileReader，请更换浏览器。', 'info');
 			return;
 		}
 
@@ -178,7 +180,7 @@
 			//上传文件
 			function upLoadFile () {
 				if(!fileArr.length){
-					alert('请选择文件');
+					message('请选择文件', 'info');
 					return;
 				}
 				fileArr.forEach(function (item, i) {

@@ -29,7 +29,6 @@
 		"express-session": "^1.15.6",
 		"express-validator": "^6.4.1",
 		"express-winston": "^3.2.1",
-		"layui-src": "^2.5.4",
 		"method-override": "^3.0.0",
 		"multer": "^1.4.1",
 		"mysql2": "^1.6.4",
@@ -41,6 +40,7 @@
 		"sequelize": "^4.41.2",
 		"sequelize-cli": "^5.4.0",
 		"swiper": "^4.5.0",
+		"toastr": "^2.1.4",
 		"winston": "^3.2.1",
 		"winston-daily-rotate-file": "^3.10.0"
 	},

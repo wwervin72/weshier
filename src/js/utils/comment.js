@@ -1,5 +1,6 @@
 import { fetchEmojiPanel, leaveMsg as leaveMsgRequest } from '../api'
 import { switchEmojiTab, selectEmoji, findSpecifyAncesitorNode, addEvent } from './index'
+import {message} from './index'
 
 /**
  * 留言
@@ -9,7 +10,6 @@ import { switchEmojiTab, selectEmoji, findSpecifyAncesitorNode, addEvent } from 
  */
 export function leaveMsg (data, textarea, commentContainer, appendComment = true) {
 	return leaveMsgRequest(data).then(res => {
-		alert(res.msg)
 		if (res.status) {
 			textarea.value = ''
 			if (appendComment) {
@@ -30,7 +30,7 @@ export function leaveMsg (data, textarea, commentContainer, appendComment = true
 			}
 			return res.data.comment
 		}
-	})
+	}).catch()
 }
 
 /**
@@ -177,7 +177,7 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 				let textarea = ancestor.querySelector('.ws_cmt_form textarea[name=comment]')
 				let content = textarea.value.trim()
 				if (!content) {
-					return alert('留言不能为空')
+					return message('留言不能为空')
 				}
 				leaveMsg({
 					articleId,
@@ -202,7 +202,7 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 					let atUser = comment.atUser && comment.atUser.id
 					let replyFormatLen
 					if (!content) {
-						return alert('留言不能为空')
+						return message('留言不能为空', 'info')
 					}
 					leaveMsg({
 						articleId,

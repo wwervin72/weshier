@@ -2816,6 +2816,13 @@ express-session@^1.15.6:
     safe-buffer "5.2.0"
     uid-safe "~2.1.5"
 
+express-validator@^6.4.1:
+  version "6.4.1"
+  resolved "https://registry.npm.taobao.org/express-validator/download/express-validator-6.4.1.tgz#6dbec50bee151d976430a8d199c9df058d753c78"
+  dependencies:
+    lodash "^4.17.15"
+    validator "^12.1.0"
+
 express-winston@^3.2.1:
   version "3.4.0"
   resolved "http://10.200.132.160:4873/express-winston/-/express-winston-3.4.0.tgz#8131822e0c9cbaa28d9600b5e866bd8edec1628b"
@@ -4477,6 +4484,10 @@ jpegtran-bin@^4.0.0:
     bin-wrapper "^4.0.0"
     logalot "^2.0.0"
 
+jquery@>=1.12.0:
+  version "3.5.1"
+  resolved "https://registry.npm.taobao.org/jquery/download/jquery-3.5.1.tgz?cache=0&sync_timestamp=1588633811418&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjquery%2Fdownload%2Fjquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
+
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.5.2"
   resolved "http://10.200.132.160:4873/js-base64/-/js-base64-2.5.2.tgz#313b6274dda718f714d00b3330bbae6e38e90209"
@@ -4622,10 +4633,6 @@ labeled-stream-splicer@^2.0.0:
   dependencies:
     inherits "^2.0.1"
     stream-splicer "^2.0.0"
-
-layui-src@^2.5.4:
-  version "2.5.5"
-  resolved "http://10.200.132.160:4873/layui-src/-/layui-src-2.5.5.tgz#69cc2e5ca73c4cd0567753c35504e98609b40f5f"
 
 lazypipe@^1.0.1:
   version "1.0.2"
@@ -7841,6 +7848,12 @@ to-through@^2.0.0:
   dependencies:
     through2 "^2.0.3"
 
+toastr@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/toastr/download/toastr-2.1.4.tgz#8b43be64fb9d0c414871446f2db8e8ca4e95f181"
+  dependencies:
+    jquery ">=1.12.0"
+
 toidentifier@1.0.0:
   version "1.0.0"
   resolved "http://10.200.132.160:4873/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
@@ -8143,6 +8156,10 @@ validate-npm-package-license@^3.0.1:
 validator@^10.4.0:
   version "10.11.0"
   resolved "http://10.200.132.160:4873/validator/-/validator-10.11.0.tgz#003108ea6e9a9874d31ccc9e5006856ccd76b228"
+
+validator@^12.1.0:
+  version "12.2.0"
+  resolved "https://registry.npm.taobao.org/validator/download/validator-12.2.0.tgz?cache=0&sync_timestamp=1584673593002&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvalidator%2Fdownload%2Fvalidator-12.2.0.tgz#660d47e96267033fd070096c3b1a6f2db4380a0a"
 
 value-or-function@^3.0.0:
   version "3.0.0"

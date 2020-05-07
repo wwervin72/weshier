@@ -141,14 +141,13 @@ module.exports = (sequelize, DataTypes) => {
 		if (!passWordReg.test(pwd)) return ''
 		try {
 			return crypto
-				.createHmac('sha1', this.salt)
+				.createHmac('sha1', salt || this.salt)
 				.update(pwd)
 				.digest('hex')
 		} catch (err) {
 			return ''
 		}
 	}
-
 	User.associate = function (models) {
 		User.Article = User.hasMany(models.Article, {
 			foreignKey: 'article_author'

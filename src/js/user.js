@@ -37,7 +37,6 @@ import { fetchArticleListHtmlPagination, uploadResume } from './api/index'
 					contactMember.insertBefore(downResumeDom, target.parentNode)
 				}
 			}
-			alert(res.msg)
 		})
 	})
 

@@ -1,5 +1,5 @@
 import { register, sendRegisterAuthCode } from './api'
-import { addEvent, validateUserName, validatePwd, validateEmail, userNameTips, passWordTips } from './utils/index'
+import { addEvent, validateUserName, validatePwd, validateEmail, userNameTips, passWordTips, message } from './utils/index'
 
 const form = document.querySelector('#form')
 
@@ -22,11 +22,11 @@ addEvent(form, 'submit', evt => {
 	let rePassword = rePasswordDom.value
 	let nickName = nickNameDom.value
 
-	if (!authCode) return alert('请输入验证码')
-	if (!inviteCode) return alert('请输入邀请码')
-	if (rePassword !== passWord) return alert('两次输入的密码不一致，请重新输入')
-	if (!validateUserName(userName)) return alert(userNameTips)
-	if (!validatePwd(passWord)) return alert(passWordTips)
+	if (!authCode) return message('请输入验证码', 'info')
+	if (!inviteCode) return message('请输入邀请码', 'info')
+	if (rePassword !== passWord) return message('两次输入的密码不一致，请重新输入', 'info')
+	if (!validateUserName(userName)) return message(userNameTips, 'info')
+	if (!validatePwd(passWord)) return message(passWordTips, 'info')
 
 	register({
 		userName,
@@ -39,7 +39,6 @@ addEvent(form, 'submit', evt => {
 		if (res.status) {
 			form.reset()
 		}
-		alert(res.msg)
 	})
 })
 
@@ -60,12 +59,11 @@ addEvent(getAuthCodeBtn, 'click', evt => {
 	evt.preventDefault()
 	if (requesting || coolTime < 60) return
 	let email = emailDom.value
-	if (!email) return alert('请输入绑定邮箱')
-	if (!validateEmail(email)) return alert('邮箱格式不正确')
+	if (!email) return message('请输入绑定邮箱', 'info')
+	if (!validateEmail(email)) return message('邮箱格式不正确', 'info')
 	requesting = true
 	sendRegisterAuthCode(email).then(res => {
 		coolTime = 60
 		refreshCoolTime()
-		alert(res.msg)
 	})
 })

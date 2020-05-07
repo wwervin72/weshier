@@ -10,7 +10,7 @@ fetchLeaveMsgHtml().then(res => {
 	comments = res.data.comments
 	commentContainer.innerHTML = res.data.html
 	delegateCommentsEvent(comments, null, document.querySelector('#leave_msg_cnt'))
-}).catch(err => alert('留言列表加载失败，刷新试试看'))
+}).catch(err => message('留言列表加载失败，刷新试试看', 'warning'))
 
 addHeaderScrollListener()
 switchUserMenu()

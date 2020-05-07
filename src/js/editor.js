@@ -1,5 +1,5 @@
 import { uploadFormData, saveArticle, updateArticle, fetchArticle } from './api'
-import { addHeaderScrollListener, switchUserMenu, autoCloseHeaderMenu } from './utils'
+import { addHeaderScrollListener, switchUserMenu, autoCloseHeaderMenu, message } from './utils'
 
 
 $(function() {
@@ -26,7 +26,7 @@ $(function() {
 				if (res.status) {
 					writeUrl(res.data)
 				} else {
-					alert('上传失败')
+					message('上传失败', 'error')
 				}
 			}).catch(err => {
 				console.log(err)
@@ -40,8 +40,8 @@ $(function() {
         const markdown = editor.getMarkdown()
 		const title = titleDom.value.trim()
 
-		// if (!title) return alert('请输入标题')
-		if (!markdown) return alert('请输入内容')
+		if (!title) return message('请输入标题')
+		if (!markdown) return message('请输入内容')
 		const password = pwdDom.value
 		// 分类
 		const category = categoryDom.value || null

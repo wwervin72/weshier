@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'querystring'
 import { api } from './url'
-import { redirectUrlKey } from '../utils'
+import { redirectUrlKey, message } from '../utils'
 
 const instance = axios.create({
 	validateStatus: function (status) {
@@ -17,7 +17,13 @@ instance.interceptors.response.use(res => {
 		window.location.href = '/login'
 	}
 	if (res.data.msg) {
-		alert(res.data.msg)
+		let type = 'success'
+		if (res.status === 500) {
+			type = 'error'
+		} else {
+			type = 'info'
+		}
+		message(res.data.msg, type)
 	}
 	if (res.status === 200) {
 		return Promise.resolve(res.data)

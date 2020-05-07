@@ -1,5 +1,6 @@
 import { switchBrowserTabs, addHeaderScrollListener, bindGoTopEvent, switchUserMenu,
-	autoCloseHeaderMenu } from './utils/index'
+	autoCloseHeaderMenu,
+	message} from './utils/index'
 import { heartArticle, fetchArticleContent, fetchArticleCommentHtml, cancelHeartArticle } from './api'
 import { delegateCommentsEvent } from './utils/comment'
 
@@ -42,9 +43,7 @@ if (articleId) {
 				comments = res.data.comments
 				commentContainer.innerHTML = res.data.html
 				delegateCommentsEvent(comments, articleId, commentContainer, article.allow_comment === '1')
-			}).catch(err => alert('留言列表加载失败，刷新试试看'))
-		} else {
-			alert(res.msg)
+			}).catch(err => message('留言列表加载失败，刷新试试看', 'warning'))
 		}
 	})
 }
@@ -63,7 +62,7 @@ heartArticleBtn.onclick = function (evt) {
 				heartArticleStatistic.innerHTML = res.data.heart_count
 				heartArticleStatistic.classList.add("hide")
 			}
-			alert(res.msg)
+			message(res.msg)
 		})
 	} else {
 		heartArticle(articleId).then(res => {
@@ -73,7 +72,7 @@ heartArticleBtn.onclick = function (evt) {
 				heartArticleStatistic.innerHTML = res.data.heart_count
 				heartArticleStatistic.classList.remove("hide")
 			}
-			alert(res.msg)
+			message(res.msg)
 		})
 	}
 }

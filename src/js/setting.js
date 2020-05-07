@@ -1,5 +1,5 @@
 import { copySiteInfo, addEvent, switchBrowserTabs, addHeaderScrollListener, bindGoTopEvent,
-	switchUserMenu, autoCloseHeaderMenu } from './utils'
+	switchUserMenu, autoCloseHeaderMenu, message } from './utils'
 import { api } from './api/url'
 import { createCategory, delCategory, updateIndividualInfo, createTag, delTag } from './api/index'
 import './utils/upload'
@@ -9,13 +9,13 @@ $('#upload_annex').uploadfile({
 	width : '100%',
 	height : 'auto',
 	success: function (fileName) {
-		alert(fileName + '上传成功');
+		message(fileName + '上传成功');
 	},
 	error: function (fileName) {
-		alert(fileName + '上传失败');
+		message(fileName + '上传失败', 'warning');
 	},
 	complete : function () {
-		alert('所有文件上传完毕');
+		message('所有文件上传完毕');
 	}
 });
 
@@ -34,8 +34,6 @@ addEvent(document.querySelector('input[name=avatar]'), 'change', function (event
 			Array.prototype.forEach.call(document.querySelectorAll('img.avatar'), el => {
 				el.setAttribute('src', res.data)
 			})
-		} else {
-			alert(res.msg || '头像更新失败')
 		}
 	})
 })
@@ -49,7 +47,7 @@ addEvent(addCategoryIpt, 'keyup', evt => {
 		let categoryName = addCategoryIpt.value
 		if (!categoryName) return
 		if (categoryList.some(el => el.name === categoryName)) {
-			alert('该分类名已存在，请重新输入')
+			message('该分类名已存在，请重新输入', 'info')
 			return
 		}
 		createCategory({
@@ -59,8 +57,6 @@ addEvent(addCategoryIpt, 'keyup', evt => {
 				addCategoryIpt.value = ''
 				categoryList.push(res.data.category)
 				addCategoryIpt.parentNode.insertAdjacentHTML('beforebegin', res.data.html)
-			} else {
-				alert(res.msg)
 			}
 		})
 	}
@@ -89,7 +85,7 @@ addEvent(addTagIpt, 'keyup', evt => {
 		let tagName = addTagIpt.value
 		if (!tagName) return
 		if (tags.some(el => el.name === tagName)) {
-			alert('该标签名已存在，请重新输入')
+			message('该标签名已存在，请重新输入', 'info')
 			return
 		}
 		createTag({
@@ -127,9 +123,7 @@ addEvent(document.querySelector('#individual_info'), 'click', evt => {
 	let bio = bioIpt.value.trim() || null
 	let weibo = weiBoIpt.value.trim() || null
 	let github = githubIpt.value.trim() || null
-	updateIndividualInfo({ url, bio, weibo, github }).then(res => {
-		alert(res.msg)
-	})
+	updateIndividualInfo({ url, bio, weibo, github }).catch()
 })
 
 addHeaderScrollListener()

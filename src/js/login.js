@@ -1,5 +1,5 @@
 import { login } from './api'
-import { copySiteInfo, redirectUrlKey } from './utils/index'
+import { copySiteInfo, redirectUrlKey, message } from './utils/index'
 
 const form = document.querySelector('#signin_form')
 const uName = document.querySelector('input[name=userName]')
@@ -13,13 +13,13 @@ form.onsubmit = evt => {
 	const userName = uName.value.trim()
 	const passWord = uPwd.value.trim()
 	const rememberMe = autoLogin.value
-	if (!uName) {
-		alert('请输入用户名')
+	if (!userName) {
+		message('请输入用户名', 'info')
 		return
 	}
 
-	if (!uPwd) {
-		alert('请输入密码')
+	if (!passWord) {
+		message('请输入密码', 'info')
 		return
 	}
 	login({
@@ -33,8 +33,6 @@ form.onsubmit = evt => {
 				sessionStorage.clear(redirectUrlKey)
 				window.location.href = redirect
 			}
-		} else {
-			alert(res.msg)
 		}
 	})
 }

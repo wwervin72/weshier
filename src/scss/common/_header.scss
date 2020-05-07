@@ -66,15 +66,23 @@
             display: inline-block;
             height: 49px;
             line-height: 49px;
-            padding: 0 15px;
+            padding: 0 10px;
             transition: color ease-in .3s;
             font-size: 14px;
-            cursor: pointer;
+			cursor: pointer;
+			vertical-align: middle;
             &:hover {
                 color: $highLightColor;
             }
 			&.ws_git {
 				font-size: 20px;
+			}
+			&.ws_wenzhang {
+				font-size: 25px;
+			}
+			&.ws_xieziban,
+			&.ws_liuyan {
+				font-size: 30px;
 			}
 		}
         .avatar {

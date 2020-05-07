@@ -25,12 +25,10 @@
 			</div>
 			<!-- 文章标签 -->
 			<div class="option tags" id="tag">
-				<label>
-					文章标签：
-					<% tags.forEach(function (tag) { %>
-						<button data-tag="<%= tag.id %>" class="tag <%= article && article.tags.findIndex(t => t.id === tag.id) !== -1 ? 'selected' : '' %>"><%= tag.name %><span data-tag="<%= tag.id %>" class="remove_item remove_tag">×</span></button>
-					<% }) %>
-				</label>
+				文章标签：
+				<% tags.forEach(function (tag) { %>
+					<button data-tag="<%= tag.id %>" class="tag <%= article && article.tags.findIndex(t => t.id === tag.id) !== -1 ? 'selected' : '' %>"><%= tag.name %><span data-tag="<%= tag.id %>" class="remove_item remove_tag">×</span></button>
+				<% }) %>
 			</div>
 			<!-- 文章密码 -->
 			<div class="option">

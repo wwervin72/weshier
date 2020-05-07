@@ -181,6 +181,15 @@ export function bindGoTopEvent() {
 	addEvent(document.querySelector('#go_top'), 'click', scrollTop)
 }
 
+export function imgLoadFailed(evt, src = '/assets/static/image/logo/shier.png') {
+	let target = evt.target
+	target.setAttribute('src', src)
+}
+
+export function userAvatarLoadFailed(evt) {
+	imgLoadFailed(evt)
+}
+
 /**
  * 加载更多
  * @param {*} handleFn

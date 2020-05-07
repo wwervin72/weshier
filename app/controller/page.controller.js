@@ -14,7 +14,6 @@ exports.noPermission = function (req, res, next) {
 }
 
 exports.serverError = function (err, req, res, next) {
-	console.log(err);
 	if (err.message
 		&& (~err.message.indexOf('not found')
 		|| (~err.message.indexOf('Cast to ObjectId failed')))) {

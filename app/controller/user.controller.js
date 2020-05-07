@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const ejs = require('ejs')
 const config = require('config')
 const upload = require('../utils/upload')
 const models = require('../../config/db/model')
@@ -18,6 +19,7 @@ exports.loginRedirect = (req, res, next) => {
     const redirectTo = req.session.redirectTo || '/'
     delete req.session.redirectTo
     res.cookie('userName', req.user.userName, {
+		httpOnly: true,
         expires: config.cookie.expires
 	})
 	respondOrRedirect({ res }, redirectTo, respEntity({ redirectTo }, '登录成功'))
@@ -196,7 +198,7 @@ exports.alterAvatar = function (req, res, next) {
  * 留言
  */
 exports.leaveMsg = async function (req, res, next) {
-	let content = req.body.content && req.body.content.trim()
+	let content = req.body.content && ejs.escapeXML(req.body.content.trim())
 	if (!content) {
 		return respond(res, respEntity(null, false, '留言内容不能为空'), 200)
 	}

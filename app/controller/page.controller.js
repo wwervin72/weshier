@@ -14,12 +14,12 @@ exports.noPermission = function (req, res, next) {
 }
 
 exports.serverError = function (err, req, res, next) {
+	console.log(err);
 	if (err.message
 		&& (~err.message.indexOf('not found')
 		|| (~err.message.indexOf('Cast to ObjectId failed')))) {
 		return next()
 	}
-	console.log(err);
 
 	let env =  process.env.NODE_ENV
 	return respond(res, respEntity(null, false, env === 'development' ? err.stack : '服务器错误'), '500.html', 500)

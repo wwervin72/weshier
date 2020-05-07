@@ -15,7 +15,7 @@ import { fetchArticleListHtmlPagination } from './api/index'
 				articleContainer.append(...div.children)
 			}
 			return res
-		})
+		}).catch(e => {})
 	}
 	addHeaderScrollListener()
 	switchUserMenu()

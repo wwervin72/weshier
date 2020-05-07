@@ -17,7 +17,7 @@ import { fetchArticleListHtmlPagination, uploadResume } from './api/index'
 				articleContainer.append(...div.children)
 			}
 			return res
-		})
+		}).catch(e => {})
 	}
 
 	const downResume = document.querySelector('#down_resume')
@@ -37,7 +37,7 @@ import { fetchArticleListHtmlPagination, uploadResume } from './api/index'
 					contactMember.insertBefore(downResumeDom, target.parentNode)
 				}
 			}
-		})
+		}).catch(e => {})
 	})
 
 	copySiteInfo()

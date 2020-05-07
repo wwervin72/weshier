@@ -23,9 +23,7 @@ export function delArticle (id) {
 	if (window.confirm('确认删除该文章？')) {
 		delArticleApi({
 			id
-		}).then(res => {
-			console.log(res);
-		})
+		}).then(res => {}).catch(e => {})
 	}
 }
 /**
@@ -205,7 +203,7 @@ export function scrollLoadMore(handleFn, pageCount = 10) {
 					hasMore = result.hasMore
 				}
 				isLoading = false
-			})
+			}).catch(e => {})
 		}
 	}, 100))
 }

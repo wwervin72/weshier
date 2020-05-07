@@ -80,9 +80,7 @@ $(function() {
             if (res.status) {
                 window.location.href = `/a/${res.data.id}`
             }
-        }).catch(err => {
-            console.log(err)
-        })
+        }).catch(err => {})
 	}
 
 	function imageUploadCb (form) {

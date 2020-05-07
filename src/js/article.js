@@ -73,7 +73,7 @@ heartArticleBtn.onclick = function (evt) {
 				heartArticleStatistic.classList.remove("hide")
 			}
 			message(res.msg)
-		})
+		}).catch(e => {})
 	}
 }
 document.querySelector('.ws_iconfont.ws_s_6').addEventListener('click', evt => {

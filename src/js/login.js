@@ -34,6 +34,6 @@ form.onsubmit = evt => {
 				window.location.href = redirect
 			}
 		}
-	})
+	}).catch(e => {})
 }
 copySiteInfo()

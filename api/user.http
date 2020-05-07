@@ -1,9 +1,12 @@
 #@name create
 
-POST {{baseURL}}/register HTTP/1.1
+POST {{baseURL}}{{contentPath}}/register HTTP/1.1
 
 {
-	"user": ""
+	"userName": "",
+	"passWord": "",
+	"nickName": "",
+	"email": "lw_ervin@sina.cn"
 }
 
 ###

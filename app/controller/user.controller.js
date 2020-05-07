@@ -5,7 +5,7 @@ const upload = require('../utils/upload')
 const models = require('../../config/db/model')
 const { saveRedisKey, verifyRedisKeyVal, expireRedisKey } = require('../../config/db/redis')
 const { renderCommentListHtml, renderSubCommentListHtml, renderCategoryHtml, renderRegisterAuthCodeHtml,
-	createAuthCode, respondOrRedirect, respond, respEntity } = require('../utils')
+	createAuthCode, respondOrRedirect, respond, respEntity, validateRequestEntity } = require('../utils')
 const { sendEmail } = require('./../../config/mailer/index')
 
 /**
@@ -69,6 +69,9 @@ exports.generateInviteCode = function name() {
  * 注册用户
  */
 exports.register = (req, res, next) => {
+	if (!validateRequestEntity({req, res})) {
+		return
+	}
 	let key = config.registerAuthcodeKeyPrefix + req.body.email
 	Promise.all([
 		verifyRedisKeyVal(key, req.body.authCode),

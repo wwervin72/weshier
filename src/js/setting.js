@@ -35,7 +35,7 @@ addEvent(document.querySelector('input[name=avatar]'), 'change', function (event
 				el.setAttribute('src', res.data)
 			})
 		}
-	})
+	}).catch(e => {})
 })
 
 // 分类相关
@@ -47,7 +47,7 @@ addEvent(addCategoryIpt, 'keyup', evt => {
 		let categoryName = addCategoryIpt.value
 		if (!categoryName) return
 		if (categoryList.some(el => el.name === categoryName)) {
-			message('该分类名已存在，请重新输入', 'info')
+			message(`分类名${categoryName}已存在，请重新输入`, 'info')
 			return
 		}
 		createCategory({
@@ -58,7 +58,7 @@ addEvent(addCategoryIpt, 'keyup', evt => {
 				categoryList.push(res.data.category)
 				addCategoryIpt.parentNode.insertAdjacentHTML('beforebegin', res.data.html)
 			}
-		})
+		}).catch(e => {})
 	}
 })
 // 删除分类
@@ -72,7 +72,7 @@ addEvent(cateListDom, 'click', '.cate_list .remove_item', evt => {
 			if (res.status) {
 				cateListDom.removeChild(target.parentNode)
 			}
-		})
+		}).catch(e => {})
 	}
 })
 
@@ -96,7 +96,7 @@ addEvent(addTagIpt, 'keyup', evt => {
 				tags.push(res.data.tag)
 				addTagIpt.parentNode.insertAdjacentHTML('beforebegin', res.data.html)
 			}
-		})
+		}).catch(e => {})
 	}
 })
 // 删除标签
@@ -110,7 +110,7 @@ addEvent(tagListDom, 'click', '.tag_list .remove_item', evt => {
 			if (res.status) {
 				tagListDom.removeChild(target.parentNode)
 			}
-		})
+		}).catch(e => {})
 	}
 })
 
@@ -123,7 +123,7 @@ addEvent(document.querySelector('#individual_info'), 'click', evt => {
 	let bio = bioIpt.value.trim() || null
 	let weibo = weiBoIpt.value.trim() || null
 	let github = githubIpt.value.trim() || null
-	updateIndividualInfo({ url, bio, weibo, github }).catch()
+	updateIndividualInfo({ url, bio, weibo, github }).catch(e => {})
 })
 
 addHeaderScrollListener()

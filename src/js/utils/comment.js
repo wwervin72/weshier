@@ -9,7 +9,8 @@ import {message} from './index'
  * @param {*} commentContainer comments list dom
  */
 export function leaveMsg (data, textarea, commentContainer, appendComment = true) {
-	return leaveMsgRequest(data).then(res => {
+	return leaveMsgRequest(data)
+	.then(res => {
 		if (res.status) {
 			textarea.value = ''
 			if (appendComment) {
@@ -30,7 +31,7 @@ export function leaveMsg (data, textarea, commentContainer, appendComment = true
 			}
 			return res.data.comment
 		}
-	}).catch()
+	}).catch(e => {})
 }
 
 /**
@@ -103,7 +104,7 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 	let emojiPanelHtml;
 	fetchEmojiPanel().then(res => {
 		emojiPanelHtml = res;
-	})
+	}).catch(e => {})
 	// 绑定评论输入域的 ctrl + enter 事件
 	addEvent(document, 'keyup', evt => {
 		if (evt.keyCode === 13 && evt.ctrlKey && evt.target.matches('.ws_cmt_form textarea[name=comment]')) {
@@ -184,7 +185,7 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 					content
 				}, textarea, commentsContainer).then(newComment => {
 					comments.push(newComment)
-				})
+				}).catch(e => {})
 			}
 			return
 		}
@@ -214,7 +215,7 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 							comment.replies = []
 						}
 						comment.replies.push(newReply)
-					})
+					}).catch(e => {})
 				}
 			}
 			return

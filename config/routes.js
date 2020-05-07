@@ -14,6 +14,8 @@ const categoryCtrl = require('../app/controller/category.controller')
 const { requireSignIn, verifyIsManager, verifyLocalAccount } = require('./middleware/authorization.js')
 const articleSchema = require('../app/schema/article')
 const tagSchema = require('../app/schema/tag')
+const categorySchema = require('../app/schema/category')
+const userSchema = require('../app/schema/user')
 
 module.exports = function (app, passport) {
 	const pauth = passport.authenticate.bind(passport)
@@ -104,12 +106,12 @@ module.exports = function (app, passport) {
 	// 发送邮件 注册验证码
 	apiRouter.get('/register/authCode', userCtrl.sendRegisterAuthcodeEmail)
 	// 注册
-	apiRouter.post('/register', userCtrl.register)
+	apiRouter.post('/register', checkSchema(userSchema.create), userCtrl.register)
 
 	// 根据用户 id 获取用户分类目录
 	apiRouter.get('/category', requireSignIn, verifyLocalAccount, userCtrl.queryUserCategory)
 	// 创建分类目录
-	apiRouter.post('/category', requireSignIn, verifyLocalAccount, userCtrl.createCategory)
+	apiRouter.post('/category', requireSignIn, verifyLocalAccount, checkSchema(categorySchema.create), categoryCtrl.create)
 	// 删除分类目录
 	apiRouter.delete('/category', requireSignIn, verifyLocalAccount, categoryCtrl.delete)
 

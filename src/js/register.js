@@ -39,7 +39,7 @@ addEvent(form, 'submit', evt => {
 		if (res.status) {
 			form.reset()
 		}
-	})
+	}).catch(e => {})
 })
 
 let coolTime = 60
@@ -65,5 +65,5 @@ addEvent(getAuthCodeBtn, 'click', evt => {
 	sendRegisterAuthCode(email).then(res => {
 		coolTime = 60
 		refreshCoolTime()
-	})
+	}).catch(e => {})
 })

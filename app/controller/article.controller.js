@@ -66,12 +66,7 @@ exports.updateArticle = function (req, res, next) {
 		} else {
 			Promise.all([
 				article.setTags(req.body.tags),
-				article.update(req.body, {
-					where: {
-						id: req.body.id,
-						article_author: req.user.id
-					}
-				})
+				article.update(req.body)
 			])
 			.then(([tagRes, result]) => respond(res, respEntity(req.body, true, '更新成功'), 200))
 			.catch(err => next(err))

@@ -103,8 +103,7 @@ exports.register = (req, res, next) => {
 exports.queryUserCategory = function (req, res, next) {
 	models.Category.findAll({
 		where: {
-			user: req.user.id,
-			status: '1'
+			user: req.user.id
 		}
 	}).then(data => {
 		return respond(res, respEntity(data), 200)
@@ -122,7 +121,6 @@ exports.createCategory = function (req, res, next) {
 	models.Category.findOne({
 		where: {
 			user: req.user.id,
-			status: '1',
 			name
 		}
 	}).then(category => {
@@ -351,11 +349,10 @@ exports.downloadResume = function (req, res, next) {
 exports.updateUserInfo = function (req, res, next) {
 	models.User.update(req.body, {
 		where: {
-			id: req.user.id,
-			status: '1'
+			id: req.user.id
 		}
-	}).then(result => {
-		const status = result[0] >= 1
+	}).then(([result]) => {
+		const status = result >= 1
 		return respond(res, respEntity(null, status, `个人信息更新${status ? '成功' : '失败'}`), 200)
 	}).catch(err => {
 		if (err.name === 'SequelizeValidationError') {
@@ -372,7 +369,6 @@ exports.sendRegisterAuthcodeEmail = function (req, res, next) {
 	let email = req.query.email
 	models.User.findOne({
 		where: {
-			status: '1',
 			email
 		}
 	}).then(exist => {

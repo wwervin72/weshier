@@ -135,6 +135,7 @@ module.exports = (sequelize, DataTypes) => {
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
 		deletedAt: 'deleted_at',
+		// 不从数据库中删除数据，而只是增加一个 deletedAt 标识当前时间
 		paranoid: true
 	})
 	User.prototype.encryptPassword = function (pwd, salt) {

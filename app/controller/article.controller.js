@@ -27,15 +27,12 @@ exports.saveArticle = function (req, res, next) {
 	}
 	models
 		.Article
-		.create(data, {
-			include: [
-				models.Article.Category
-			],
-		})
+		.create(data)
 		.then(article => {
 			if (!article) {
 				return next()
 			}
+			article.setCategories(data.category)
 			article.setTags(data.tags)
 			return respond(res, respEntity(article, '文章创建成功'), 200)
 		})

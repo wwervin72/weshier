@@ -14,6 +14,8 @@ exports.noPermission = function (req, res, next) {
 }
 
 exports.serverError = function (err, req, res, next) {
+	console.log(err);
+
 	if (err.message
 		&& (~err.message.indexOf('not found')
 		|| (~err.message.indexOf('Cast to ObjectId failed')))) {
@@ -307,7 +309,11 @@ exports.article = function (req, res, next) {
  */
 exports.editor = function (req, res, next) {
 	Promise.all([
-		models.Tag.findUserTags(req.user.id),
+		models.Tag.findAll({
+			where: {
+				user: req.user.id
+			}
+		}),
 		models.Category.findAll({
 			where: {
 				user: req.user.id
@@ -338,7 +344,11 @@ exports.editor = function (req, res, next) {
  */
 exports.editArticle = function (req, res, next) {
 	Promise.all([
-		models.Tag.findUserTags(req.user.id),
+		models.Tag.findAll({
+			where: {
+				user: req.user.id
+			}
+		}),
 		models.Article.queryArticleEditDetail(models, {
 			id: req.params.articleId,
 			status: "1",

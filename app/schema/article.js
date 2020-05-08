@@ -14,7 +14,7 @@ exports.create = {
 	allow_comment: {
 		in: ['body'],
 		custom: {
-			options: (val, {req, location, path}) => {
+			options: (val, {req}) => {
 				if (val !== '0' && val !== '1') {
 					throw new Error('是否允许评论参数错误')
 				}
@@ -50,17 +50,18 @@ exports.create = {
 		}
 	},
 	category: {
+		in: ['body'],
 		custom: {
-			options: (val, {req, location, path}) => {
+			options: (val, {req}) => {
 				if (val) {
-					return models.Category.findUserCategories(req.user.id, {
-						id: {
-							[Sequelize.Op.in]: val
+					return models.Category.findOne({
+						where: {
+							user: req.user.id,
+							id: val
 						}
-					}).then(categories => {
-						let unExistedCategories = val.filter(el => categories.findIndex(t => t.id === el) === -1)
-						if (unExistedCategories.length) {
-							return Promise.reject(`分类${unExistedCategories.join(',')}不存在`)
+					}).then(category => {
+						if (!category) {
+							return Promise.reject(`分类${category}不存在`)
 						} else {
 							return true
 						}
@@ -76,12 +77,16 @@ exports.create = {
 			errorMessage: "文章标签必须是标签数组"
 		},
 		custom: {
-			options: (val, {req, location, path}) => {
+			options: (val, {req}) => {
 				if (val.length) {
-					return models.Tag.findUserTags(req.user.id, {
-						id: {
-							[Sequelize.Op.in]: val
-						}
+					return models.Tag.findAll({
+						where: {
+							user: req.user.id,
+							id: {
+								[Sequelize.Op.in]: val
+							}
+						},
+						attributes: ['id', 'name', 'desc']
 					}).then(tags => {
 						let unExistedTags = val.filter(el => tags.findIndex(t => t.id === el) === -1)
 						if (unExistedTags.length) {
@@ -102,7 +107,7 @@ exports.update = {
 	id: {
 		in: ['body'],
 		custom: {
-			options: (val, {req, location, path}) => {
+			options: (val, {req}) => {
 				if (val) {
 					return models.Article.queryUserArticle(req.user.id, val)
 					.then(a => {

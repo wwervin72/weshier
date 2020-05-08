@@ -35,15 +35,5 @@ module.exports = (sequelize, DataTypes) => {
 		})
 	}
 
-	Tag.findUserTags = function (userId, options = {}) {
-		return Tag.findAll({
-			where: {
-				user: userId,
-				...options
-			},
-			attributes: ['id', 'name', 'desc']
-		})
-	}
-
 	return Tag
 }

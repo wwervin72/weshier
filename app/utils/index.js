@@ -41,6 +41,7 @@ exports.respond = function (res, data, tpl, status) {
 
 exports.validateRequestEntity = function ({req, res}) {
 	const validatorResult = validationResult(req)
+	console.log(validatorResult);
 	let result = validatorResult.isEmpty()
 	if (!result) {
 		exports.respond(res, exports.respEntity(null, 422, validatorResult.errors.map(err => err.msg).join(',')), 422)

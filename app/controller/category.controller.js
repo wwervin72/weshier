@@ -1,8 +1,5 @@
-const path = require('path')
-const fs = require('fs')
-const config = require('config')
 const models = require('../../config/db/model')
-const { respondOrRedirect, respond, respEntity, validateRequestEntity, renderTagHtml } = require('../utils')
+const { respond, respEntity, validateRequestEntity, renderCategoryHtml } = require('../utils')
 
 exports.create = function (req, res, next) {
 	if (!validateRequestEntity({req, res})) {
@@ -10,7 +7,7 @@ exports.create = function (req, res, next) {
 	}
 	models.Category.create({
 		user: req.user.id,
-		name
+		name: req.body.name
 	}).then(category => {
 		if (category) {
 			return renderCategoryHtml(category, req.user).then(html => {

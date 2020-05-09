@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
 
 	Tag.associate = function (models) {
 		Tag.User = Tag.belongsTo(models.User, {
-			foreignKey: 'user'
+			foreignKey: 'user',
+			targetKey: 'id'
 		})
 		Tag.Article = Tag.belongsToMany(models.Article, {
 			as: 'articles',

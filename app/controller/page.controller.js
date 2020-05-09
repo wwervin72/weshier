@@ -15,13 +15,11 @@ exports.noPermission = function (req, res, next) {
 
 exports.serverError = function (err, req, res, next) {
 	console.log(err);
-
 	if (err.message
 		&& (~err.message.indexOf('not found')
 		|| (~err.message.indexOf('Cast to ObjectId failed')))) {
 		return next()
 	}
-
 	let env =  process.env.NODE_ENV
 	return respond(res, respEntity(null, false, env === 'development' ? err.stack : '服务器错误'), '500.html', 500)
 }
@@ -100,21 +98,17 @@ exports.userHomePage = function (req, res, next) {
 					where: {
 						user: user.id,
 					},
+					// group: 'ArticleTag.tag_id',
 					attributes: [
 						'id',
-						'name'
+						'name',
+						// [Sequelize.fn('COUNT', 'Article.id'), 'articleCount']
 					],
 					include: [
 						{
 							model: models.Article,
 							as: 'articles',
-							through: {
-								group: 'tag_id',
-								attributes: [
-									'tag_id',
-									[Sequelize.fn('COUNT', 'article_id'), "articleCount"]
-								]
-							}
+							attributes: ['id']
 						}
 					]
 				}),
@@ -393,11 +387,47 @@ exports.isCoding = function (req, res, next) {
  * blog
  */
 exports.blog = function (req, res, next) {
-	models.Article.queryArticleList(models, {
-		offset: 0,
-		limit: 10
-	}).then(articles => {
-		return respond(res, { articles }, 'blog.html')
+	Promise.all([
+		models.Article.queryArticleList(models, {
+			offset: 0,
+			limit: 10
+		}),
+		models.Tag.findAll({
+			attributes: [
+				'id', 'name', 'desc',
+			],
+			include: [
+				{
+					model: models.User,
+					required: true
+				},
+				{
+					model: models.Article,
+					as: 'articles',
+					attributes: ['id']
+				}
+			],
+			limit: 30,
+		}),
+		models.User.findAll({
+			attributes: [
+				'userName', 'nickName', 'avatar',
+			],
+			where: {
+				provide: 'local'
+			},
+			include: [
+				{
+					model: models.Article,
+					attributes: ['id']
+				}
+			],
+			limit: 10,
+		})
+	])
+	.then(([articles, tags, author]) => {
+		tags.sort((a, b) => b.articles.length - a.articles.length)
+		return respond(res, { articles, tags, author }, 'blog.html')
 	}).catch(err => {
 		return next(err)
 	})

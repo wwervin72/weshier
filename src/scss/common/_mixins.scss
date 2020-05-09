@@ -445,6 +445,16 @@
 	}
 }
 
+@mixin module {
+	padding: 15px 10px;
+	margin-top: 15px;
+	.title {
+		margin-bottom: 10px;
+		border-bottom: 1px solid $borderColor;
+		padding-bottom: 5px;
+	}
+}
+
 @mixin tag {
 	position: relative;
     display: inline-block;

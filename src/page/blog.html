@@ -21,8 +21,34 @@
 		</div>
 		<div class="aside">
 			<!-- 和风天气插件 -->
-			<div id="weather-view-he"></div>
-			<div class="clock_wrap">
+			<div class="module module_bg weather_module">
+				<h3 class="title">天气</h3>
+				<div id="weather-view-he"></div>
+			</div>
+			<div class="module module_bg tag_statistic">
+				<h3 class="title">热门标签</h3>
+				<% tags.forEach(tag => { %>
+					<a href="/u/<%= tag.User.userName %>/tag/<%= tag.name %>" class="tag" target="_blank">
+						<%= tag.dataValues.name %><span class="article_statistic"><%= '(' + tag.articles.length + ')' %></span>
+					</a>
+				<% }) %>
+			</div>
+			<div class="module module_bg author_statistic">
+				<h3 class="title">作者榜</h3>
+				<ul>
+					<% author.forEach(a => { %>
+						<li class="author_item">
+							<img width="30px" height="30px" class="avatar" src="<%= a.avatar %>" title="<%= a.nickName %>">
+							<span class="article_statistic"><%= '(' + a.Articles.length + ')' %></span>
+							<a class="author" href="/u/<%= a.userName %>" target="_blank">
+								<%= a.nickName %>
+							</a>
+						</li>
+					<% }) %>
+				</ul>
+			</div>
+			<div class="module module_bg clock_module">
+				<h3 class="title">时间</h3>
 				<div id="clock">
 					<canvas id="plate">您的浏览器不支持canvas属性，请更换浏览器在进行浏览</canvas>
 					<canvas id="needles"></canvas>

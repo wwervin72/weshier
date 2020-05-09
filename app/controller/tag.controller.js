@@ -1,8 +1,6 @@
-const path = require('path')
-const fs = require('fs')
-const config = require('config')
+const Sequelize = require('Sequelize')
 const models = require('../../config/db/model')
-const { respondOrRedirect, respond, respEntity, validateRequestEntity, renderTagHtml } = require('../utils')
+const { respond, respEntity, validateRequestEntity, renderTagHtml } = require('../utils')
 
 exports.create = function (req, res, next) {
 	if (!validateRequestEntity({req, res})) {
@@ -35,4 +33,27 @@ exports.delete = function (req, res, next) {
 		let status = !!data
 		return respond(res, respEntity(null, status, `删除${status ? '成功' : '失败'}`), 200)
 	}).catch(err => next(err))
+}
+
+exports.getTagList = function (req, res, next) {
+	models.Tag.findAll({
+		attributes: [
+			'id', 'name', 'desc',
+		],
+		include: [
+			{
+				model: models.User
+			},
+			{
+				model: models.Article,
+				as: 'articles',
+				attributes: ['id']
+			}
+		],
+		limit: 100,
+	}).then(tags => {
+		console.log(tags);
+
+		return respond(res, respEntity({tags}, true, null), 200)
+	})
 }

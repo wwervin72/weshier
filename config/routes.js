@@ -117,6 +117,8 @@ module.exports = function (app, passport) {
 
 	apiRouter.post('/tag', requireSignIn, verifyLocalAccount, checkSchema(tagSchema.create), tagCtrl.create)
 	apiRouter.delete('/tag', requireSignIn, verifyLocalAccount, tagCtrl.delete)
+	// 获取 tags 列表
+	apiRouter.get('/tags', tagCtrl.getTagList)
 
 	// 用户留言
 	apiRouter.post('/message/leave', requireSignIn, userCtrl.leaveMsg)

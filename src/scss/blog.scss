@@ -3,6 +3,7 @@
 @import './common/_footer.scss';
 @import './common/_article.list.scss';
 @import './common/_common.scss';
+@import './common/_mixins.scss';
 
 
 .container {
@@ -35,10 +36,7 @@
 	width: 100% !important;
 	border: none !important;
 	border-radius: 0 !important;
-}
-.clock_wrap {
-	padding: 10px;
-	margin: 10px 0;
+	background-color: transparent !important;
 }
 #clock {
 	position: relative;
@@ -50,4 +48,49 @@
 }
 .side_tools {
 	@include sideTool();
+}
+
+.module {
+	@include module()
+}
+.weather_module {
+	margin-top: 0;
+}
+.tag_statistic {
+	word-break: keep-all;
+}
+.tag {
+	@include tag();
+	margin-bottom: 5px;
+	background-color: $bgColor;
+	&::before {
+		border-color: $moduleBGC transparent;
+	}
+	&::after {
+		background-color: $moduleBGC;
+	}
+}
+.author_item {
+	overflow: hidden;
+	padding: 5px 0;
+	.avatar,
+	.article_statistic {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.avatar {
+		float: left;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
+	.article_statistic {
+		float: right;
+		width: 40px;
+		text-align: right;
+	}
+	.author {
+		display: block;
+		overflow: hidden;
+		line-height: 30px;
+	}
 }

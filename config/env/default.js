@@ -29,6 +29,7 @@ module.exports = {
 	path: {
 		upload: path.join(__dirname, '../../public', 'upload')
 	},
+	commentMaxLen: 200,
 	log: path.join(__dirname, '../../log'),
 	registerAuthcodeKeyPrefix: 'joinAuthCode-',
 	registerInviteCodeKeyPrefix: 'joinInviteCode'

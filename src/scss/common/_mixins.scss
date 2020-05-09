@@ -219,6 +219,7 @@
 
 @mixin emojiPanel {
 	position: absolute;
+	max-width: calc(100vw - 30px);
 	width: 360px;
 	top: 35px;
 	left: -47px;

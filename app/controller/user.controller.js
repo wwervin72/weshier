@@ -198,40 +198,46 @@ exports.alterAvatar = function (req, res, next) {
  * 留言
  */
 exports.leaveMsg = async function (req, res, next) {
-	let content = req.body.content && ejs.escapeXML(req.body.content.trim())
-	if (!content) {
-		return respond(res, respEntity(null, false, '留言内容不能为空'), 200)
+	if (!validateRequestEntity({req, res})) {
+		return
 	}
-	let article = await models.Article.findOne({
-		where: {
-			id: req.body.articleId,
-			status: '1'
-		},
-		attributes: ['allow_comment']
-	})
-	if (!article) {
-		return respond(res, respEntity(null, false, '评论文章不存在'), 200)
-	}
-	if (!article.allow_comment) {
-		return respond(res, respEntity(null, false, '该文章已关闭了评论功能'), 200)
+	// 转义内容
+	let content = ejs.escapeXML(req.body.content.trim())
+	let allowComment = true
+	// 传入了 articleId 则认为是评论，否则是留言
+	if (req.body.articleId) {
+		let article = await models.Article.findOne({
+			where: {
+				id: req.body.articleId,
+				status: '1'
+			},
+			attributes: ['allow_comment']
+		})
+		if (!article) {
+			return respond(res, respEntity(null, false, '评论文章不存在'), 200)
+		}
+		if (!article.allow_comment) {
+			allowComment = false
+			return respond(res, respEntity(null, false, '该文章已关闭了评论功能'), 200)
+		}
 	}
 	let reply = req.body.comment
 	let atUser = req.body.atUser
 	let p = []
 	if (reply) {
+		// 找到要回复的评论
 		p.push(models.Comment.findOne({
 			where: {
-				id: reply,
-				status: '1'
+				id: reply
 			},
 			attributes: ['id']
 		}))
 	}
 	if (atUser) {
+		// 找到要回复的人
 		p.push(models.User.findOne({
 			where: {
-				id: atUser,
-				status: '1'
+				id: atUser
 			},
 			attributes: ['id', 'nickName', 'userName']
 		}))
@@ -270,19 +276,20 @@ exports.leaveMsg = async function (req, res, next) {
 			let p
 			if (comment.reply) {
 				// 回复 子评论
-				p = renderSubCommentListHtml([comment])
+				p = renderSubCommentListHtml([comment], req.user, allowComment)
 			} else {
-				p = renderCommentListHtml([comment])
+				p = renderCommentListHtml([comment], req.user, allowComment)
 			}
 			p.then((html) => {
 				const status = !!comment
+				let typeStr = reply ? '回复' : (req.body.articleId ? '评论' : '留言')
 				return respond(res, respEntity(
 					status ? {
 						comment,
 						html
 					} : null,
 					status,
-					'留言' + status ? '成功' : '失败'
+					typeStr + (status ? '成功' : '失败')
 				), 200)
 			}).catch(err => next(err))
 		})

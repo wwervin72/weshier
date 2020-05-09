@@ -1,4 +1,4 @@
-import { fetchEmojiPanel, leaveMsg as leaveMsgRequest } from '../api'
+import { fetchEmojiPanel, leaveMsg as leaveMsgRequest, delMsg } from '../api'
 import { switchEmojiTab, selectEmoji, findSpecifyAncesitorNode, addEvent } from './index'
 import {message} from './index'
 
@@ -99,9 +99,18 @@ export function switchCmtEditor(target, isOneTrigger, replyUser) {
 	}
 }
 
+/**
+ * 代理留言事件处理函数
+ * @param {*} comments 留言/评论列表
+ * @param {*} articleId 文章 id，如果为空，则认为是留言
+ * @param {*} commentsContainer 留言或者评论 dom 的父容器
+ * @param {*} allowComment 根据文章判断是否允许评论
+ */
 export function delegateCommentsEvent(comments, articleId, commentsContainer, allowComment = true) {
 	// 表情包面板字符串
 	let emojiPanelHtml;
+	let comment
+	// 获取 emoji 面板的 html 代码
 	fetchEmojiPanel().then(res => {
 		emojiPanelHtml = res;
 	}).catch(e => {})
@@ -170,41 +179,21 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 			}
 			return
 		}
-		// 留言/评论
-		if (target.matches('.cmt_fn_block .publish, #comment .cmt_fn_block .publish')) {
-			if (!allowComment) return
-			let ancestor = findSpecifyAncesitorNode(target, '.ws_cmt_editor')
-			if (ancestor) {
-				let textarea = ancestor.querySelector('.ws_cmt_form textarea[name=comment]')
-				let content = textarea.value.trim()
-				if (!content) {
-					return message('留言不能为空')
-				}
-				leaveMsg({
-					articleId,
-					content
-				}, textarea, commentsContainer).then(newComment => {
-					comments.push(newComment)
-				}).catch(e => {})
-			}
-			return
-		}
-		// 回复
+		// 回复评论
 		if (target.matches('.sub_comment_wrap .cmt_fn_block .publish')) {
 			if (!allowComment) return
 			let ancestor = findSpecifyAncesitorNode(target, '.comment')
 			if (ancestor) {
 				let index = Array.prototype.indexOf.call(ancestor.parentNode.querySelectorAll('.comment'), ancestor)
-				let comment
 				if (index !== -1) {
 					comment = comments[index]
 					let textarea = ancestor.querySelector('.ws_cmt_form textarea[name=comment]')
 					let content = textarea.value.trim()
-					let atUser = comment.atUser && comment.atUser.id
-					let replyFormatLen
 					if (!content) {
 						return message('留言不能为空', 'info')
 					}
+					let atUser = comment.atUser && comment.atUser.id
+					let replyFormatLen
 					leaveMsg({
 						articleId,
 						content: replyFormatLen == null ? content : content.slice(replyFormatLen - 1).trim(),
@@ -215,18 +204,36 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 							comment.replies = []
 						}
 						comment.replies.push(newReply)
+						delete comment.atUser
 					}).catch(e => {})
 				}
 			}
 			return
+		} else if (target.matches('.cmt_fn_block .publish, #comment .cmt_fn_block .publish')) {
+			// 留言/评论
+			if (!allowComment) return
+			let ancestor = findSpecifyAncesitorNode(target, '.ws_cmt_editor')
+			if (ancestor) {
+				let textarea = ancestor.querySelector('.ws_cmt_form textarea[name=comment]')
+				let content = textarea.value.trim()
+				if (!content) {
+					return message('留言内容不能为空')
+				}
+				leaveMsg({
+					articleId,
+					content
+				}, textarea, commentsContainer).then(newComment => {
+					comments.push(newComment)
+				}).catch(e => {})
+			}
+			return
 		}
-		// 回复评论
 		// 添加新评论
 		if (target.matches('.tool_row .reply, .add_comment, .sub_comment_reply')) {
 			if (!allowComment) return
 			let commentDom = findSpecifyAncesitorNode(target, '.comment')
 			let subCommentDom = target.matches('.add_comment') ? null : findSpecifyAncesitorNode(target, '.sub_comment')
-			let comment, subComment
+			let subComment
 			if (commentDom) {
 				let commentDoms = commentDom.parentNode.querySelectorAll('.comment')
 				let index = Array.prototype.indexOf.call(commentDoms, commentDom)
@@ -258,6 +265,50 @@ export function delegateCommentsEvent(comments, articleId, commentsContainer, al
 			let subCmtWrapper = findSpecifyAncesitorNode(target, '.sub_comment_wrap')
 			subCmtWrapper.classList.remove('hide_exceed_cmt')
 			return
+		}
+		if (target.matches('.del_cmt')) {
+			let id = target.dataset.id
+			if (id && confirm('确认删除该评论?')) {
+				delMsg(id)
+				.then(res => {
+					let dom = findSpecifyAncesitorNode(target, '.sub_comment, .comment')
+					// 删除 dom
+					if (dom) {
+						dom.parentNode.removeChild(dom)
+					}
+					// 删除数据
+					let commentData
+					let len = comments.length
+					if (res.data.reply) {
+						// 是回复信息
+						for (let i = 0; i < len; i++) {
+							if (comments[i].id === res.data.reply) {
+								commentData = comments[i]
+								let length = commentData.replies ? commentData.replies.length : 0
+								for (let j = 0; j < length; j++) {
+									if (commentData.replies[j].id === res.data.id) {
+										// 删除评论下的指定回复
+										commentData.replies.splice(j, 1)
+										break
+									}
+								}
+								break
+							}
+						}
+					} else {
+						// 评论
+						for (let i = 0; i < len; i++) {
+							if (comments[i].id === res.data.id) {
+								comments.splice(i, 1)
+								break
+							}
+						}
+					}
+				})
+				console.log(comments);
+
+				return
+			}
 		}
 	})
 }

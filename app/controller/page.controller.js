@@ -637,7 +637,7 @@ exports.renderLeaveMsgCommentsHtml = function (req, res, next) {
 		comment_article: null,
 		reply: null
 	}).then(comments => {
-		renderCommentListHtml(comments).then((html) => {
+		renderCommentListHtml(comments, req.user, true).then((html) => {
 			return respond(res, respEntity({
 				comments,
 				html

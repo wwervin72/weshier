@@ -11,11 +11,13 @@ const pageCtrl = require('../app/controller/page.controller')
 const annexCtrl = require('../app/controller/annex.controller')
 const tagCtrl = require('../app/controller/tag.controller')
 const categoryCtrl = require('../app/controller/category.controller')
+const commentCtrl = require('../app/controller/comment.controller')
 const { requireSignIn, verifyIsManager, verifyLocalAccount } = require('./middleware/authorization.js')
 const articleSchema = require('../app/schema/article')
 const tagSchema = require('../app/schema/tag')
 const categorySchema = require('../app/schema/category')
 const userSchema = require('../app/schema/user')
+const commentSchema = require('../app/schema/comment')
 
 module.exports = function (app, passport) {
 	const pauth = passport.authenticate.bind(passport)
@@ -120,8 +122,9 @@ module.exports = function (app, passport) {
 	// 获取 tags 列表
 	apiRouter.get('/tags', tagCtrl.getTagList)
 
+	apiRouter.delete('/message/:id', requireSignIn, commentCtrl.delete)
 	// 用户留言
-	apiRouter.post('/message/leave', requireSignIn, userCtrl.leaveMsg)
+	apiRouter.post('/message/leave', requireSignIn, checkSchema(commentSchema.create), userCtrl.leaveMsg)
 	// 获取留言列表
 	apiRouter.get('/message/leave', userCtrl.queryLeaveMsg)
 	// 获取留言列表

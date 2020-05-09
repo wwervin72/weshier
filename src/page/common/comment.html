@@ -18,12 +18,16 @@
 			<div class="tool_row">
 				<a href="javascript:;" class="heart_comment ws_iconfont ws_zan">赞</a>
 				<a href="javascript:;" class="reply ws_iconfont ws_huifu <%= allowComment ? '' : 'disabled' %>">回复</a>
+				<% if (user && comment.author.id === user.id) { %>
+					<a href="javascript:;" data-id="<%= comment.id %>" class="ws_iconfont ws_shanchu del_cmt">删除</a>
+				<% } %>
 			</div>
 		</div>
 		<div class="sub_comment_wrap hide_exceed_cmt">
 			<% if (comment.replies && comment.replies.length) { %>
 				<%- include('./subComment.html', {
-					replies: comment.replies
+					replies: comment.replies,
+					user: user
 				}) %>
 				<div class="more_comment">
 					<% if(allowComment){ %>

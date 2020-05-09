@@ -1,3 +1,4 @@
+const config = require('config')
 const models = require('../../config/db/model')
 const { userNameReg, userNameTips, passWordReg, passWordTips} = require('../utils/variables')
 const Sequelize = require('sequelize')

@@ -183,7 +183,7 @@ exports.queryArticleComments = function (req, res, next) {
 		comment_article: req.params.articleId,
 		reply: null
 	}).then(comments => {
-		renderCommentListHtml(comments, allowComment).then(html => {
+		renderCommentListHtml(comments, req.user, allowComment).then(html => {
 			return respond(res, respEntity({
 				comments,
 				html

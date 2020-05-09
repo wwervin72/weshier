@@ -41,7 +41,6 @@ exports.respond = function (res, data, tpl, status) {
 
 exports.validateRequestEntity = function ({req, res}) {
 	const validatorResult = validationResult(req)
-	console.log(validatorResult);
 	let result = validatorResult.isEmpty()
 	if (!result) {
 		exports.respond(res, exports.respEntity(null, 422, validatorResult.errors.map(err => err.msg).join(',')), 422)
@@ -131,18 +130,20 @@ exports.renderEmojiPanelHtml = function (emoji) {
 	})
 }
 
-exports.renderCommentListHtml = function (comments, allowComment = true) {
+exports.renderCommentListHtml = function (comments, user, allowComment = true) {
 	return ejs.renderFile(
 		path.join(__dirname, '../../', process.env.VIEW_PATH, 'common/comment.html'),
-		{ comments, allowComment }
+		{ comments, allowComment, user }
 	)
 }
 
-exports.renderSubCommentListHtml = function (subComments) {
+exports.renderSubCommentListHtml = function (subComments, user, allowComment = true) {
 	return ejs.renderFile(
 		path.join(__dirname, '../../', process.env.VIEW_PATH, 'common/subComment.html'),
 		{
-			replies: subComments
+			replies: subComments,
+			allowComment,
+			user
 		}
 	)
 }

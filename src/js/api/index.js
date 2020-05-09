@@ -104,6 +104,13 @@ export function leaveMsg (data) {
 	})
 }
 
+export function delMsg (id) {
+	return request({
+		url: `/message/` + id,
+		method: 'delete'
+	})
+}
+
 export function fetchLeaveMsg () {
 	return request({
 		url: `/message/leave`

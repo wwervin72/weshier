@@ -442,7 +442,7 @@ exports.blogArticlePagination = function (req, res, next) {
 		limit: pageCount,
 		userName: req.query.userName
 	}, req.user).then(data => {
-		return respond(res, respEntity(data, true, '文章列表查询成功'), 200)
+		return respond(res, respEntity(data, true, null), 200)
 	}).catch(err => next(err))
 }
 

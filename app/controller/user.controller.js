@@ -22,7 +22,7 @@ exports.loginRedirect = (req, res, next) => {
 		httpOnly: true,
         expires: config.cookie.expires
 	})
-	respondOrRedirect({ res }, redirectTo, respEntity({ redirectTo }, '登录成功'))
+	respondOrRedirect({ res }, redirectTo, respEntity({ redirectTo }, true))
 }
 
 /**

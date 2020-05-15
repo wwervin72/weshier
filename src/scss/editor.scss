@@ -4,6 +4,8 @@
 @import './common/_footer.scss';
 @import './common/_common.scss';
 
+$switcherColor: #666;
+
 html, body, .ws_editor {
     height: 100%;
 }
@@ -17,12 +19,26 @@ body {
 #editor {
 	float: left;
 	width: 70% !important;
+	&.full_screen {
+		width: 100% !important;
+		.fa-switcher {
+			border-color: $switcherColor;
+			&::before {
+				right: 2px;
+				left: auto;
+				background-color: $switcherColor;
+			}
+		}
+	}
 }
 .article_options {
 	float: right;
 	width: 30%;
 	height: 100%;
 	overflow: auto;
+	&.hide {
+		transform: translateX(100%);
+	}
 }
 .full_editor {
 	#editor {
@@ -125,6 +141,26 @@ input[name=allow_comment]:checked + .simulate_radio {
 	@include listItem();
 	&.selected {
 		border-color: $pinkColor;
+	}
+}
+
+.fa-switcher{
+	position: relative;
+	width: 32px;
+	height: 16px;
+	border: 1px solid $pinkColor;
+	border-radius: 7px;
+	&::before {
+		position: absolute;
+		display: inline-block;
+		content: '';
+		width: 10px;
+		height: 10px;
+		top: 2px;
+		left: 2px;
+		border-radius: 50%;
+		background-color: $pinkColor;
+		transition: left ease-in-out .3s;
 	}
 }
 

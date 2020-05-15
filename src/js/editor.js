@@ -15,8 +15,11 @@ $(function() {
 	const categoryDom = document.querySelector('#category')
 	const thumbnailDom = document.querySelector('#thumbnail_img')
 
-	let tags = articleTags.slice(), editor
+	const editorDom = document.querySelector('#editor')
+	const articleOption = document.querySelector('.article_options')
+	let editorIsFull = false
 
+	let tags = articleTags.slice(), editor
     const imageUploadFn = (files, cb, writeUrl) => {
         let data = new FormData()
 		data.append('file', files[0])
@@ -99,7 +102,7 @@ $(function() {
         toolbarIcons: () => {
             return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|",
             "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "pagebreak",
-            "|", "goto-line", "watch", "preview", "fullscreen", "clear", "search", "save"]
+            "|", "goto-line", "watch", "preview", "fullscreen", "clear", "search", "save", "switcher"]
         },
         imageUpload : true,
         imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
@@ -107,11 +110,22 @@ $(function() {
 		imageUploadCb,
         saveHTMLToTextarea: true,
         toolbarIconsClass: {
-            save: "fa-save"
+			save: "fa-save",
+			switcher: "fa-switcher"
         },
         toolbarHandlers: {
             save: function (cm, icon, cursor, selection) {
                 save()
+            },
+            switcher: function (cm, icon, cursor, selection) {
+				editorIsFull = !editorIsFull
+				if (editorIsFull) {
+					editorDom.classList.add('full_screen')
+					articleOption.classList.add('hide')
+				} else {
+					editorDom.classList.remove('full_screen')
+					articleOption.classList.remove('hide')
+				}
             }
 		},
         onfullscreen: function () {
@@ -119,8 +133,13 @@ $(function() {
         },
         onfullscreenExit: function () {
             $('#editor').css({'zIndex': 'auto'})
-        }
-    })
+		},
+		onload () {
+			console.log(123);
+
+			document.querySelector('.fa-switcher').parentNode.style.cssText += 'vertical-align:top;';
+		}
+	})
 
 	const tagActive = 'selected'
     $('#tag').on('click', evt => {

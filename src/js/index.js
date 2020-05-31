@@ -48,6 +48,14 @@ addEvent(document.querySelector('.pagination'), 'click', '.pagination .page', fu
 	scrollPage(null, { definiteIndex: pageNum })
 })
 
+Array.prototype.forEach.call(document.querySelectorAll('.section'), el => {
+	let img = el.computedStyleMap().get('background-image').toString()
+	new Wave({
+		target: el,
+		img
+	})
+})
+
 const photoWall = document.querySelector('#photo_wall')
 const wallSpaces = document.querySelectorAll('.wall-space')
 function pauseGallaryAni() {

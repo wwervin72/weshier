@@ -264,10 +264,12 @@ section {
 	background: linear-gradient(to top, #41b93e 0%, #3b9e3c 35%, #274535 75%, #190530 100%);
 }
 .desc {
+	position: relative;
 	display: inline-block;
 	margin-top: 40vh;
 	line-height: 2.5;
 	opacity: 0;
+	z-index: 1000;
 	animation: headerDesc .3s ease-in-out .5s;
 	animation-fill-mode: forwards;
 	h1 {

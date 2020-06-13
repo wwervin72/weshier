@@ -14,7 +14,7 @@
 			<? data.forEach(function (tag){ ?>
 			<?- include('./common/articleList.html', {
 				articles: tag.articles.map(el =>
-			{ el.User = tag.User return el }) }) ?>
+			{ el.User = tag.User; return el }) }) ?>
 			<? }) ?>
 		</article>
 		<?- include('./common/sideTool.html', {

@@ -130,7 +130,7 @@
 				<article class="article_list" id="article_list">
 					<?- include('./common/articleList.html', {
 					articles: data.articles.map(el =>
-					{ el.User = data return el }) }) ?>
+					{ el.User = data; return el }) }) ?>
 				</article>
 			</div>
 		</div>

@@ -23,7 +23,7 @@ getEntry(
 	},
 	htmlEntry
 );
-
+const favicon = path.join(__dirname, "../src/image/logo/shier.png");
 for (let page in htmlEntry) {
 	let chunkName = path.basename(page, path.extname(page));
 	let chunks = Object.prototype.hasOwnProperty.call(entry, chunkName)
@@ -35,6 +35,9 @@ for (let page in htmlEntry) {
 		chunks,
 		minify: process.env.NODE_ENV !== "development",
 	};
+	if (!/^common\//.test(page)) {
+		option.favicon = favicon;
+	}
 	htmlWebpackPlugins.push(new htmlWebpackPlugin(option));
 }
 const baseConf = merge({
@@ -49,6 +52,11 @@ const baseConf = merge({
 				test: /\.js$/,
 				include: path.join(__dirname, "../src/js/**/*"),
 				loader: "babel-loader",
+			},
+			{
+				test: /\.html$/,
+				include: path.join(__dirname, "../src/page/**/*"),
+				loader: "html-loader",
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

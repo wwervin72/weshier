@@ -32,9 +32,9 @@ import "../scss/user.scss";
 
 	const downResume = document.querySelector("#down_resume");
 	const contactMember = document.querySelector("#contact");
-	document
-		.querySelector("input[name=resume]")
-		.addEventListener("change", (evt) => {
+	let resume = document.querySelector("input[name=resume]");
+	if (resume) {
+		resume.addEventListener("change", (evt) => {
 			let formData = new FormData();
 			let target = evt.target;
 			formData.append("file", target.files[0]);
@@ -59,6 +59,7 @@ import "../scss/user.scss";
 				})
 				.catch((e) => {});
 		});
+	}
 
 	copySiteInfo();
 	switchBrowserTabs();

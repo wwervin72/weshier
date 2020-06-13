@@ -1,161 +1,200 @@
-const dayjs = require('dayjs')
-const config = require('config')
-const models = require('../../config/db/model')
-const Sequelize = models.Sequelize
-const sequelize = models.sequelize
-const { readEmojis, renderCommentListHtml, respond, respEntity } = require('../utils/index')
+const dayjs = require("dayjs");
+const config = require("config");
+const models = require("../../config/db/model");
+const Sequelize = models.Sequelize;
+const sequelize = models.sequelize;
+const {
+	readEmojis,
+	renderCommentListHtml,
+	respond,
+	respEntity,
+} = require("../utils/index");
 
 exports.notFound = function (req, res, next) {
-	return respond(res, respEntity(null, false, "未找到该资源"), '404.html', 404)
-}
+	return respond(
+		res,
+		respEntity(null, false, "未找到该资源"),
+		"404.html",
+		404
+	);
+};
 
 exports.noPermission = function (req, res, next) {
-	return respond(res, respEntity(null, false, "抱歉，你不能访问该资源"), '403.html', 403)
-}
+	return respond(
+		res,
+		respEntity(null, false, "抱歉，你不能访问该资源"),
+		"403.html",
+		403
+	);
+};
 
 exports.serverError = function (err, req, res, next) {
-	console.log(err);
-	if (err.message
-		&& (~err.message.indexOf('not found')
-		|| (~err.message.indexOf('Cast to ObjectId failed')))) {
-		return next()
+	if (
+		err.message &&
+		(~err.message.indexOf("not found") ||
+			~err.message.indexOf("Cast to ObjectId failed"))
+	) {
+		return next();
 	}
-	let env =  process.env.NODE_ENV
-	return respond(res, respEntity(null, false, env === 'development' ? err.stack : '服务器错误'), '500.html', 500)
-}
+	let env = process.env.NODE_ENV;
+	return respond(
+		res,
+		respEntity(
+			null,
+			false,
+			env === "development" ? err.stack : "服务器错误"
+		),
+		"500.html",
+		500
+	);
+};
 
 /**
  * 首页
  */
 exports.index = function (req, res, next) {
-	return respond(res, null, 'index.html')
-}
+	return respond(res, null, "index.html");
+};
 
 /**
  * 登录界面
  */
 exports.renderLogin = function (req, res, next) {
 	if (req.user) {
-		return res.redirect('/')
+		return res.redirect("/");
 	}
-	return respond(res, {
-		apiPrefix: config.apiPrefix
-	}, 'login.html')
-}
+	return respond(
+		res,
+		{
+			apiPrefix: config.apiPrefix,
+		},
+		"login.html"
+	);
+};
 
 /**
  * 注册
  */
 exports.renderRegister = function (req, res, next) {
 	if (req.user) {
-		return res.redirect('/')
+		return res.redirect("/");
 	}
-	return respond(res, null, 'register.html')
-}
+	return respond(res, null, "register.html");
+};
 
 /**
  * 用户主页
  */
 exports.userHomePage = function (req, res, next) {
-	models
-		.User
-		.findOne({
-			where: {
-				userName: req.params.userName,
-				status: '1',
-				provide: 'local'
-			}
-		})
-		.then(user => {
-			if (!user) return next()
-			res.locals.member = user
-			let pageNum = req.query.pageNum || 0
-			let pageCount = req.query.pageCount || 10
+	models.User.findOne({
+		where: {
+			userName: req.params.userName,
+			status: "1",
+			provide: "local",
+		},
+	})
+		.then((user) => {
+			if (!user) return next();
+			res.locals.member = user;
+			let pageNum = req.query.pageNum || 0;
+			let pageCount = req.query.pageCount || 10;
 			return Promise.all([
-				models.Article.findAll(Object.assign({
-					where: {
-						status: '1',
-						article_author: user.id
-					},
-					order: [
-						['created_at', 'DESC']
-					],
-					include: [
+				models.Article.findAll(
+					Object.assign(
 						{
-							model: models.Comment,
-							attributes: ['id'],
+							where: {
+								article_author: user.id,
+							},
+							order: [["created_at", "DESC"]],
+							include: [
+								{
+									model: models.Comment,
+									attributes: ["id"],
+								},
+								{
+									model: models.Heart,
+									attributes: ["id"],
+								},
+							],
 						},
 						{
-							model: models.Heart,
-							attributes: ['id']
+							offset: pageNum * pageCount,
+							limit: pageCount,
 						}
-					]
-				}, {
-					offset: pageNum * pageCount,
-					limit: pageCount
-				})),
+					)
+				),
 				models.Tag.findAll({
 					where: {
 						user: user.id,
 					},
-					// group: 'ArticleTag.tag_id',
-					attributes: [
-						'id',
-						'name',
-						// [Sequelize.fn('COUNT', 'Article.id'), 'articleCount']
-					],
+					attributes: ["id", "name"],
 					include: [
 						{
 							model: models.Article,
-							as: 'articles',
-							attributes: ['id']
-						}
-					]
+							as: "articles",
+							attributes: ["id"],
+						},
+					],
 				}),
 				models.Article.findAll({
 					where: {
-						status: '1',
-						article_author: user.id
+						article_author: user.id,
 					},
-					group: 'article_category',
+					group: "article_category",
 					attributes: [
-						'article_category',
-						[Sequelize.fn('COUNT', 'article_category'), "categoryArticleCount"]
+						"article_category",
+						[
+							Sequelize.fn("COUNT", "article_category"),
+							"categoryArticleCount",
+						],
 					],
 					include: [
 						{
 							model: models.Category,
-							as: 'categories',
-							attributes: [
-								'name', 'id'
-							]
-						}
-					]
+							as: "categories",
+							attributes: ["name", "id"],
+						},
+					],
 				}),
-				sequelize.query(`
-					SELECT DATE_FORMAT(created_at, "%Y-%m") as createMonth, COUNT(id) as monthCount
-					FROM ws_article where article_author=${user.id} and status='1' GROUP BY
-					createMonth;
-				`)
-			]).then(results => {
-				user.articles = results[0]
-				user.tags = results[1].sort((a, b) => b.articles.length - a.articles.length)
-				user.categoryStatistic = results[2]
-				user.createMonthStatistic = results[3][0]
-				return user
-			})
+				models.Article.findAll({
+					raw: true,
+					where: {
+						article_author: user.id,
+					},
+					group: "createMonth",
+					attributes: [
+						[
+							Sequelize.fn(
+								"DATE_FORMAT",
+								Sequelize.col("created_at"),
+								"%Y-%m"
+							),
+							"createMonth",
+						],
+						[Sequelize.fn("COUNT", "id"), "monthCount"],
+					],
+				}),
+			]).then((results) => {
+				user.articles = results[0];
+				user.tags = results[1].sort(
+					(a, b) => b.articles.length - a.articles.length
+				);
+				user.categoryStatistic = results[2];
+				user.createMonthStatistic = results[3];
+				return user;
+			});
 		})
-		.then(data => {
+		.then((data) => {
 			if (!data) {
-				return next()
+				return next();
 			}
-			data.age = dayjs().diff(dayjs(data.created_at), 'day')
-			return respond(res, { data }, 'user.html')
+			data.age = dayjs().diff(dayjs(data.created_at), "day");
+			return respond(res, { data }, "user.html");
 		})
-		.catch(err => {
-			return next(err)
-		})
-}
+		.catch((err) => {
+			return next(err);
+		});
+};
 
 /**
  * 配置
@@ -165,138 +204,119 @@ exports.setting = function (req, res, next) {
 		models.Category.findAll({
 			where: {
 				user: req.user.id,
-				status: '1'
-			}
+				status: "1",
+			},
 		}),
 		models.Annex.findAll({
 			where: {
 				user: req.user.id,
-			}
+			},
 		}),
 		models.Tag.findAll({
 			where: {
 				user: req.user.id,
 			},
-			attributes: ['id', 'name', 'desc']
+			attributes: ["id", "name", "desc"],
 		}),
-	]).then(([category, annex, tags]) => {
-		annex.forEach(el => {
-			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`
+	])
+		.then(([category, annex, tags]) => {
+			annex.forEach((el) => {
+				el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`;
+			});
+			return respond(
+				res,
+				{
+					category,
+					annex,
+					tags,
+				},
+				"setting.html"
+			);
 		})
-		return respond(res, {
-			category,
-			annex,
-			tags
-		}, 'setting.html')
-	}).catch(err => next(err))
-}
+		.catch((err) => next(err));
+};
 
 /**
  * 文章
  */
 exports.article = function (req, res, next) {
-	models
-		.Article
-		.findOne({
-			where: {
-				status: '1',
-				id: req.params.articleId
+	models.Article.findOne({
+		where: {
+			id: req.params.articleId,
+		},
+		attributes: {
+			exclude: ["thumbnail", "status", "topping"],
+		},
+		include: [
+			{
+				model: models.User,
 			},
-			attributes: {
-				exclude: ['thumbnail', 'status', 'topping']
+			{
+				model: models.Tag,
+				as: "tags",
 			},
-			include: [
-				{
-					model: models.User,
-				},
-				{
-					model: models.Tag,
-					as: 'tags'
-				},
-				{
-					model: models.Heart,
-					attributes: ['user']
-				},
-				{
-					model: models.Comment
-				}
-			]
-		})
-		.then(article => {
+			{
+				model: models.Heart,
+				attributes: ["user"],
+			},
+			{
+				model: models.Comment,
+			},
+		],
+	})
+		.then((article) => {
 			if (!article) {
-				return next()
+				return next();
 			}
-			return models
-						.Article
-						.findAll({
-							attributes: ['id', 'title', 'created_at'],
-							where: {
-								article_author: article.article_author,
-								[Sequelize.Op.or]: [
-									{
-										created_at: {
-											[Sequelize.Op.lt]: article.created_at
-										}
-									},
-									{
-										created_at: {
-											[Sequelize.Op.gt]: article.created_at
-										}
-									},
-								],
-							},
-							limit: 2
-						}).then(prevNext => {
-							// var data = prevNext.concat(article).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-							var data = prevNext.concat(article).sort((a, b) => a.id - b.id)
-							if (data.length === 3) {
-								// 包含三种情况
-								// 1：有上一条和下一条
-								// 2：有两条晚于该文章的
-								// 3：有两条早于该文章的
-								// 排序 如果该文章处于最后或者第一位
-								// 则只取下标为1的
-								// 否则刚好第一个为前一篇文章最后一个为后一篇文章
-
-								if (data[0].id === article.id) {
-									// 该文章在第一个
-									article.prev = null
-									article.next = data[1]
-								} else if (data[2].id === article.id) {
-									// 该文章在最后一个
-									article.prev = data[1]
-									article.next = null
-								} else {
-									article.prev = data[0]
-									article.next = data[2]
-								}
-
-							} else if (data.length === 2) {
-								if (data[0].id === article.id) {
-									article.prev = null
-									article.next = data[1]
-								} else {
-									article.prev = data[0]
-									article.next = null
-								}
-							} else {
-								article.prev = null
-								article.next = null
-							}
-							return article
-						})
+			return Promise.all([
+				models.Article.findOne({
+					attributes: ["id", "title", "created_at"],
+					order: [["created_at", "DESC"]],
+					where: {
+						article_author: article.article_author,
+						created_at: {
+							// 上一篇
+							[Sequelize.Op.lt]: article.created_at,
+						},
+					},
+					limit: 1,
+				}),
+				models.Article.findOne({
+					attributes: ["id", "title", "created_at"],
+					order: [["created_at", "ASC"]],
+					where: {
+						article_author: article.article_author,
+						created_at: {
+							// 下一篇
+							[Sequelize.Op.gt]: article.created_at,
+						},
+					},
+					limit: 1,
+				}),
+			]).then(([prev, next]) => {
+				article.prev = prev;
+				article.next = next;
+				return article;
+			});
 		})
-		.then(article => {
-			return respond(res, {
-				article,
-				hearted: req.user && article.Hearts.some(heart => heart.user === req.user.id)
-			}, 'article.html')
+		.then((article) => {
+			return respond(
+				res,
+				{
+					article,
+					hearted:
+						req.user &&
+						article.Hearts.some(
+							(heart) => heart.user === req.user.id
+						),
+				},
+				"article.html"
+			);
 		})
-		.catch(err => {
-			return next(err)
-		})
-}
-
+		.catch((err) => {
+			return next(err);
+		});
+};
 
 /**
  * 编辑器
@@ -305,33 +325,37 @@ exports.editor = function (req, res, next) {
 	Promise.all([
 		models.Tag.findAll({
 			where: {
-				user: req.user.id
-			}
+				user: req.user.id,
+			},
 		}),
 		models.Category.findAll({
 			where: {
-				user: req.user.id
-			}
+				user: req.user.id,
+			},
 		}),
 		models.Annex.findAll({
 			where: {
-				user: req.user.id
-			}
-		})
-	]).then(result => {
-		let [ tags, categories, annex ] = result
-		annex.forEach(el => {
-			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`
-		})
-		return respond(res, {
-			article: null,
-			articleStr: null,
-			category: categories,
-			tags,
-			annex
-		}, 'editor.html')
-	})
-}
+				user: req.user.id,
+			},
+		}),
+	]).then((result) => {
+		let [tags, categories, annex] = result;
+		annex.forEach((el) => {
+			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`;
+		});
+		return respond(
+			res,
+			{
+				article: null,
+				articleStr: null,
+				category: categories,
+				tags,
+				annex,
+			},
+			"editor.html"
+		);
+	});
+};
 
 /**
  * 编辑文章
@@ -340,8 +364,8 @@ exports.editArticle = function (req, res, next) {
 	Promise.all([
 		models.Tag.findAll({
 			where: {
-				user: req.user.id
-			}
+				user: req.user.id,
+			},
 		}),
 		models.Article.queryArticleEditDetail(models, {
 			id: req.params.articleId,
@@ -350,38 +374,44 @@ exports.editArticle = function (req, res, next) {
 		}),
 		models.Category.findAll({
 			where: {
-				user: req.user.id
-			}
+				user: req.user.id,
+			},
 		}),
 		models.Annex.findAll({
 			where: {
-				user: req.user.id
+				user: req.user.id,
+			},
+		}),
+	])
+		.then((result) => {
+			let [tags, article, categories, annex] = result;
+			if (!article) {
+				return next();
 			}
+			annex.forEach((el) => {
+				el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`;
+			});
+			return respond(
+				res,
+				{
+					article,
+					articleStr: null,
+					category: categories,
+					tags,
+					annex,
+				},
+				"editor.html"
+			);
 		})
-	]).then(result => {
-		let [tags, article, categories, annex] = result
-		if (!article) {
-			return next()
-		}
-		annex.forEach(el => {
-			el.path = `/${process.env.ASSETS_PREFIX}/${process.env.UPLOAD_DIR}/${el.fileName}`
-		})
-		return respond(res, {
-			article,
-			articleStr: null,
-			category: categories,
-			tags,
-			annex
-		}, 'editor.html')
-	}).catch(err => next(err))
-}
+		.catch((err) => next(err));
+};
 
 /**
  * coding
  */
 exports.isCoding = function (req, res, next) {
-	return respond(res, null, 'coding.html')
-}
+	return respond(res, null, "coding.html");
+};
 
 /**
  * blog
@@ -390,65 +420,68 @@ exports.blog = function (req, res, next) {
 	Promise.all([
 		models.Article.queryArticleList(models, {
 			offset: 0,
-			limit: 10
+			limit: 10,
 		}),
 		models.Tag.findAll({
-			attributes: [
-				'id', 'name', 'desc',
-			],
+			attributes: ["id", "name", "desc"],
 			include: [
 				{
 					model: models.User,
-					required: true
+					required: true,
 				},
 				{
 					model: models.Article,
-					as: 'articles',
-					attributes: ['id']
-				}
+					as: "articles",
+					attributes: ["id"],
+				},
 			],
 			limit: 30,
 		}),
 		models.User.findAll({
-			attributes: [
-				'userName', 'nickName', 'avatar',
-			],
+			attributes: ["userName", "nickName", "avatar"],
 			where: {
-				provide: 'local'
+				provide: "local",
 			},
 			include: [
 				{
 					model: models.Article,
-					attributes: ['id']
-				}
+					attributes: ["id"],
+				},
 			],
 			limit: 10,
-		})
+		}),
 	])
-	.then(([articles, tags, author]) => {
-		tags.sort((a, b) => b.articles.length - a.articles.length)
-		return respond(res, { articles, tags, author }, 'blog.html')
-	}).catch(err => {
-		return next(err)
-	})
-}
+		.then(([articles, tags, author]) => {
+			tags.sort((a, b) => b.articles.length - a.articles.length);
+			return respond(res, { articles, tags, author }, "blog.html");
+		})
+		.catch((err) => {
+			return next(err);
+		});
+};
 
 exports.blogArticlePagination = function (req, res, next) {
-	let pageNum = req.query.pageNum || 0
-	let pageCount = req.query.pageCount || 10
+	let pageNum = req.query.pageNum || 0;
+	let pageCount = req.query.pageCount || 10;
 
-	models.Article.queryArticleListHtml(models, {
-		offset: pageCount * pageNum,
-		limit: pageCount,
-		userName: req.query.userName
-	}, req.user).then(data => {
-		return respond(res, respEntity(data, true, null), 200)
-	}).catch(err => next(err))
-}
+	models.Article.queryArticleListHtml(
+		models,
+		{
+			offset: pageCount * pageNum,
+			limit: pageCount,
+			userName: req.query.userName,
+		},
+		req.user
+	)
+		.then((data) => {
+			return respond(res, respEntity(data, true, null), 200);
+		})
+		.catch((err) => next(err));
+};
 
 exports.annex = function (req, res, next) {
-	return respond(res, null, 'annex.html')
-}
+	return respond(res, null, "annex.html");
+};
 
 /**
  * 用户 tag 下所有文章
@@ -456,38 +489,38 @@ exports.annex = function (req, res, next) {
 exports.tagArticles = function (req, res, next) {
 	models.Tag.findAll({
 		where: {
-			name: req.params.tagName
+			name: req.params.tagName,
 		},
-		order: [
-			['created_at', 'DESC']
-		],
+		order: [["created_at", "DESC"]],
 		include: [
 			{
 				model: models.User,
 				where: {
-					userName: req.params.userName
+					userName: req.params.userName,
 				},
 			},
 			{
 				model: models.Article,
-				as: 'articles',
+				as: "articles",
 				include: [
 					{
 						model: models.Comment,
-						attributes: ['id']
+						attributes: ["id"],
 					},
 					{
 						model: models.Heart,
-						attributes: ['id']
-					}
-				]
-			}
-		]
-	}).then(data => {
-		if (!data || !data.length) return next()
-		return respond(res, { data }, 'tagArticles.html')
-	}).catch(err => next(err))
-}
+						attributes: ["id"],
+					},
+				],
+			},
+		],
+	})
+		.then((data) => {
+			if (!data || !data.length) return next();
+			return respond(res, { data }, "tagArticles.html");
+		})
+		.catch((err) => next(err));
+};
 
 /**
  * 用户分类下所有文章
@@ -495,38 +528,38 @@ exports.tagArticles = function (req, res, next) {
 exports.categoryArticles = function (req, res, next) {
 	models.Category.findOne({
 		where: {
-			name: req.params.categoryName
+			name: req.params.categoryName,
 		},
-		order: [
-			[models.Article, 'created_at', 'DESC']
-		],
+		order: [[models.Article, "created_at", "DESC"]],
 		include: [
 			{
 				model: models.User,
 				where: {
 					userName: req.params.userName,
-					provide: 'local'
-				}
+					provide: "local",
+				},
 			},
 			{
 				model: models.Article,
 				include: [
 					{
 						model: models.Comment,
-						attributes: ['id']
+						attributes: ["id"],
 					},
 					{
 						model: models.Heart,
-						attributes: ['id']
-					}
-				]
-			}
-		]
-	}).then(data => {
-		if (!data) return next()
-		return respond(res, { data }, 'categoryArticles.html')
-	}).catch(err => next(err))
-}
+						attributes: ["id"],
+					},
+				],
+			},
+		],
+	})
+		.then((data) => {
+			if (!data) return next();
+			return respond(res, { data }, "categoryArticles.html");
+		})
+		.catch((err) => next(err));
+};
 
 /**
  * 按时间统计文章
@@ -534,41 +567,51 @@ exports.categoryArticles = function (req, res, next) {
 exports.articleStatisticByDate = function (req, res, next) {
 	models.User.findOne({
 		where: {
-			userName: req.params.userName
+			userName: req.params.userName,
 		},
-	}).then(user => {
-		if (!user) return next()
-		let month = req.params.month
-		if (month < 10 && month.length < 2) {
-			month = '0' + month
-		}
-		return models.Article.findAll({
-			where: [
-				{
-					status: '1',
-					article_author: user.id,
-				},
-				sequelize.where(
-					sequelize.fn('DATE_FORMAT', sequelize.col('Article.created_at'),  '%Y%m'),
-					req.params.year + month
-				)
-			],
-			include: [
-				{
-					model: models.Comment,
-					attributes: ['id']
-				},
-				{
-					model: models.Heart,
-					attributes: ['id']
-				}
-			]
-		}).then(result => {
-			user.articles = result
-			return respond(res, { data: user }, 'dateStatisticArticles.html')
+	})
+		.then((user) => {
+			if (!user) return next();
+			let month = req.params.month;
+			if (month < 10 && month.length < 2) {
+				month = "0" + month;
+			}
+			return models.Article.findAll({
+				where: [
+					{
+						status: "1",
+						article_author: user.id,
+					},
+					sequelize.where(
+						sequelize.fn(
+							"DATE_FORMAT",
+							sequelize.col("Article.created_at"),
+							"%Y%m"
+						),
+						req.params.year + month
+					),
+				],
+				include: [
+					{
+						model: models.Comment,
+						attributes: ["id"],
+					},
+					{
+						model: models.Heart,
+						attributes: ["id"],
+					},
+				],
+			}).then((result) => {
+				user.articles = result;
+				return respond(
+					res,
+					{ data: user },
+					"dateStatisticArticles.html"
+				);
+			});
 		})
-	}).catch(err => next(err))
-}
+		.catch((err) => next(err));
+};
 
 /**
  * practice list 页面
@@ -577,19 +620,21 @@ exports.practicePages = function (req, res, next) {
 	models.User.findOne({
 		where: {
 			userName: req.params.userName,
-			status: '1',
-			provide: 'local'
+			status: "1",
+			provide: "local",
 		},
 		include: [
 			{
-				model: models.Practice
-			}
-		]
-	}).then(data => {
-		if (!data) return next()
-		return respond(res, { member: data }, 'practiceList.html')
-	}).catch(err => next(err))
-}
+				model: models.Practice,
+			},
+		],
+	})
+		.then((data) => {
+			if (!data) return next();
+			return respond(res, { member: data }, "practiceList.html");
+		})
+		.catch((err) => next(err));
+};
 
 /**
  * 单个 practice 界面
@@ -598,36 +643,40 @@ exports.practice = function (req, res, next) {
 	model.User.findOne({
 		where: {
 			userName: req.params.userName,
-			status: '1',
-			provide: 'local'
+			status: "1",
+			provide: "local",
 		},
 		include: [
 			{
 				model: models.Practice,
 				where: {
-					id: req.params.practiceId
-				}
-			}
-		]
-	}).then(data => {
-		if (!data || !data.Practices.length) return next()
-		return respond(res, { data }, 'practiceList.html')
-	}).catch(err => next(err))
-}
+					id: req.params.practiceId,
+				},
+			},
+		],
+	})
+		.then((data) => {
+			if (!data || !data.Practices.length) return next();
+			return respond(res, { data }, "practiceList.html");
+		})
+		.catch((err) => next(err));
+};
 
 exports.generateEmojiPanelHtml = function (req, res, next) {
 	readEmojis()
-		.then(emoji => {
-			return respond(res, { emojiTabs: emoji }, 'common/emojiPanel.html')
+		.then((emoji) => {
+			return respond(res, { emojiTabs: emoji }, "common/emojiPanel.html");
 		})
-		.catch(err => next(err))
-}
+		.catch((err) => next(err));
+};
 
 exports.renderLeaveMsg = function (req, res, next) {
-	readEmojis().then(emoji => {
-		return respond(res, { emojiTabs: emoji }, 'leaveMsg.html')
-	}).catch(err => next(err))
-}
+	readEmojis()
+		.then((emoji) => {
+			return respond(res, { emojiTabs: emoji }, "leaveMsg.html");
+		})
+		.catch((err) => next(err));
+};
 
 /**
  * 渲染留言列表 html 代码
@@ -635,17 +684,23 @@ exports.renderLeaveMsg = function (req, res, next) {
 exports.renderLeaveMsgCommentsHtml = function (req, res, next) {
 	models.Comment.queryCommentList(models, {
 		comment_article: null,
-		reply: null
-	}).then(comments => {
-		renderCommentListHtml(comments, req.user, true).then((html) => {
-			return respond(res, respEntity({
-				comments,
-				html
-			}), 200)
+		reply: null,
+	})
+		.then((comments) => {
+			renderCommentListHtml(comments, req.user, true).then((html) => {
+				return respond(
+					res,
+					respEntity({
+						comments,
+						html,
+					}),
+					200
+				);
+			});
 		})
-	}).catch(err => next(err))
-}
+		.catch((err) => next(err));
+};
 
 exports.renderResetPwdHtml = function (req, res, next) {
-	return respond(res, null, 'pwdReset.html')
-}
+	return respond(res, null, "pwdReset.html");
+};

@@ -14,7 +14,7 @@
 		<article class="container article_list" id="article_list">
 			<?- include('./common/articleList.html', {
 			articles: data.Articles.map(el =>
-			{ el.User = data.User return el }) }) ?>
+			{ el.User = data.User; return el }) }) ?>
 		</article>
 
 		<?- include('./common/sideTool.html', {

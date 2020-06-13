@@ -1,27 +1,38 @@
-import { copySiteInfo, switchBrowserTabs, bindGoTopEvent, addHeaderScrollListener,
-	scrollLoadMore, switchUserMenu, autoCloseHeaderMenu, initFireWorks } from './utils'
-import { fetchArticleListHtmlPagination } from './api/index'
+import {
+	copySiteInfo,
+	switchBrowserTabs,
+	bindGoTopEvent,
+	addHeaderScrollListener,
+	scrollLoadMore,
+	switchUserMenu,
+	autoCloseHeaderMenu,
+	initFireWorks,
+} from "./utils";
+import { fetchArticleListHtmlPagination } from "./api/index";
 
-;(function () {
-	const articleContainer = document.querySelector('#article_list')
+import "../scss/blog.scss";
+(function () {
+	const articleContainer = document.querySelector("#article_list");
 	function loadMoreArticles(pageCount, pageNum) {
 		return fetchArticleListHtmlPagination({
 			pageCount,
-			pageNum
-		}).then(res => {
-			if (res.status) {
-				let div = document.createElement('div')
-				div.innerHTML = res.data.html
-				articleContainer.append(...div.children)
-			}
-			return res
-		}).catch(e => {})
+			pageNum,
+		})
+			.then((res) => {
+				if (res.status) {
+					let div = document.createElement("div");
+					div.innerHTML = res.data.html;
+					articleContainer.append(...div.children);
+				}
+				return res;
+			})
+			.catch((e) => {});
 	}
-	addHeaderScrollListener()
-	switchUserMenu()
-	autoCloseHeaderMenu()
-	scrollLoadMore(loadMoreArticles)
-	initFireWorks()
+	addHeaderScrollListener();
+	switchUserMenu();
+	autoCloseHeaderMenu();
+	scrollLoadMore(loadMoreArticles);
+	initFireWorks();
 	// clock
 	var dom = document.querySelector("#clock");
 	var plate = document.querySelector("#plate");
@@ -39,16 +50,18 @@ import { fetchArticleListHtmlPagination } from './api/index'
 		this.linewidth = linewidth;
 		this.numLen = numLen;
 		this.NUMLEN = NUMLEN;
-		this.getCalibCoor = function(i) {
+		this.getCalibCoor = function (i) {
 			//获得表盘刻度两端的坐标
 			var X = width / 2 + this.radius * Math.sin((6 * i * Math.PI) / 180);
 			var Y = width / 2 - this.radius * Math.cos((6 * i * Math.PI) / 180);
 			var x =
 				width / 2 +
-				(this.radius - this.platelen) * Math.sin((6 * i * Math.PI) / 180);
+				(this.radius - this.platelen) *
+					Math.sin((6 * i * Math.PI) / 180);
 			var y =
 				width / 2 -
-				(this.radius - this.platelen) * Math.cos((6 * i * Math.PI) / 180);
+				(this.radius - this.platelen) *
+					Math.cos((6 * i * Math.PI) / 180);
 
 			// 获得分针刻度的坐标
 			var numx =
@@ -76,10 +89,10 @@ import { fetchArticleListHtmlPagination } from './api/index'
 				numx: numx,
 				numy: numy,
 				numX: numX,
-				numY: numY
+				numY: numY,
 			};
 		};
-		this.drawCalibration = function() {
+		this.drawCalibration = function () {
 			//画刻度
 			for (var i = 0, coorObj; i < 60; i++) {
 				coorObj = this.getCalibCoor(i);
@@ -108,7 +121,11 @@ import { fetchArticleListHtmlPagination } from './api/index'
 				i % 5 == 0 &&
 					(this.cnt.fillStyle = "rgba(6,128,67,.5)") &&
 					(this.cnt.font = "18px Arial") &&
-					this.cnt.fillText(i / 5, coorObj.numX - 5, coorObj.numY + 5);
+					this.cnt.fillText(
+						i / 5,
+						coorObj.numX - 5,
+						coorObj.numY + 5
+					);
 			}
 		};
 	}
@@ -120,7 +137,7 @@ import { fetchArticleListHtmlPagination } from './api/index'
 		this.strokeStyle = strokeStyle;
 		this.lineCap = lineCap;
 		this.obj = obj;
-		this.getNeedleCoor = function(i) {
+		this.getNeedleCoor = function (i) {
 			var X = width / 2 + this.R * 0.8 * Math.sin(i); //起点的坐标
 			var Y = width / 2 - this.R * 0.8 * Math.cos(i);
 
@@ -128,13 +145,14 @@ import { fetchArticleListHtmlPagination } from './api/index'
 			var y = width / 2 + width * 0.05 * Math.cos(i);
 			return { X: X, Y: Y, x: x, y: y };
 		};
-		this.drawNeedle = function() {
+		this.drawNeedle = function () {
 			var d = new Date().getTime();
 			var angle;
 			switch (this.obj) {
 				case 0:
 					angle =
-						(((((d / 3600000) % 24) + 8) / 12) * 360 * Math.PI) / 180;
+						(((((d / 3600000) % 24) + 8) / 12) * 360 * Math.PI) /
+						180;
 					break;
 				case 1:
 					angle = ((((d / 60000) % 60) / 60) * 360 * Math.PI) / 180;
@@ -155,14 +173,14 @@ import { fetchArticleListHtmlPagination } from './api/index'
 		};
 	}
 
-	function init () {
+	function init() {
 		cntP.clearRect(0, 0, width, width);
 		width = dom.getBoundingClientRect().width;
 
-		plate.setAttribute('width', width)
-		plate.setAttribute('height', width)
-		needles.setAttribute('width', width)
-		needles.setAttribute('height', width)
+		plate.setAttribute("width", width);
+		plate.setAttribute("height", width);
+		needles.setAttribute("width", width);
+		needles.setAttribute("height", width);
 
 		// 实例化一个表盘对象
 		var clock = new drawclock(cntP, width / 2, 5, 1, 10, 25);
@@ -213,8 +231,7 @@ import { fetchArticleListHtmlPagination } from './api/index'
 	draw();
 	setInterval(draw, 1);
 
-	copySiteInfo()
-	switchBrowserTabs()
-	bindGoTopEvent()
-})()
-
+	copySiteInfo();
+	switchBrowserTabs();
+	bindGoTopEvent();
+})();

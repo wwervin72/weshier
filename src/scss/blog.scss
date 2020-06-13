@@ -1,10 +1,9 @@
-@import './common/_reset.scss';
-@import './common/_header.scss';
-@import './common/_footer.scss';
-@import './common/_article.list.scss';
-@import './common/_common.scss';
-@import './common/_mixins.scss';
-
+@import "./common/_reset.scss";
+@import "./common/_header.scss";
+@import "./common/_footer.scss";
+@import "./common/_articleList.scss";
+@import "./common/_common.scss";
+@import "./common/_mixins.scss";
 
 .container {
 	overflow: hidden;
@@ -51,7 +50,7 @@
 }
 
 .module {
-	@include module()
+	@include module();
 }
 .weather_module {
 	margin-top: 0;

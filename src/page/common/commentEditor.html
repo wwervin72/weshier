@@ -1,11 +1,11 @@
-<% if (allowComment) { %>
-<div class="ws_cmt_editor <%= type === 'reply' ? 'hide reply_editor' : '' %>">
-	<% if (type === 'comment'){ %>
+<? if (allowComment) { ?>
+<div class="ws_cmt_editor <?= type === 'reply' ? 'hide reply_editor' : '' ?>">
+	<? if (type === 'comment'){ ?>
 		<a class="avatar">
-			<img src="<%= (user && user.avatar) || '/assets/image/avatar.png' %>"
-				title="<%= (user && user.nickName) || '登录后评论' %>" width="38px" height="38px"/>
+			<img src="<?= (user && user.avatar) || '/assets/image/avatar.png' ?>"
+				title="<?= (user && user.nickName) || '登录后评论' ?>" width="38px" height="38px"/>
 		</a>
-	<% } %>
+	<? } ?>
 	<form class="ws_cmt_form">
 		<textarea name="comment" placeholder="智慧如你，不留下点什么吗..." id="cmt_editor"></textarea>
 	</form>
@@ -18,7 +18,7 @@
 		<a class="cancel" href="javascript:;">取消</a>
 	</div>
 </div>
-<% } else { %>
-<div class="not_allow_comment <%= type === 'reply' ? 'hide' : '' %>" title="作者关闭了评论">
+<? } else { ?>
+<div class="not_allow_comment <?= type === 'reply' ? 'hide' : '' ?>" title="作者关闭了评论">
 </div>
-<% } %>
+<? } ?>

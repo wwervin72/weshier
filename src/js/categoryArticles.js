@@ -1,3 +1,4 @@
-import {switchUserMenu} from './utils'
+import { switchUserMenu } from "./utils";
+import "../scss/tagArticles.scss";
 
-switchUserMenu()
+switchUserMenu();

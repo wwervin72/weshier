@@ -1,22 +1,22 @@
-<% replies.forEach(function (reply){ %>
+<? replies.forEach(function (reply){ ?>
 	<div class="sub_comment">
 		<p class="content">
-			<a href="/u/<%= reply.author.userName %>"><%= reply.author.nickName %></a>:
-			<% if (reply.replyComment && reply.replyComment.replyUser) { %>
-				<a href="/u/<%= reply.replyComment.replyUser.userName %>">@<%= reply.replyComment.replyUser.nickName %></a>&nbsp;&nbsp;
-				<%- reply.content.replace(new RegExp('^@' + reply.replyComment.replyUser.nickName), '').trim() %>
-			<% } else { %>
-				<%- reply.content %>
-			<% } %>
+			<a href="/u/<?= reply.author.userName ?>"><?= reply.author.nickName ?></a>:
+			<? if (reply.replyComment && reply.replyComment.replyUser) { ?>
+				<a href="/u/<?= reply.replyComment.replyUser.userName ?>">@<?= reply.replyComment.replyUser.nickName ?></a>&nbsp;&nbsp;
+				<?- reply.content.replace(new RegExp('^@' + reply.replyComment.replyUser.nickName), '').trim() ?>
+			<? } else { ?>
+				<?- reply.content ?>
+			<? } ?>
 		</p>
 		<div class="sub_tool_row">
-			<span class="reply_time"><%= reply.created_at %></span>
+			<span class="reply_time"><?= reply.created_at ?></span>
 			<a href="javascript:;" class="ws_iconfont ws_zan">赞</a>
-			<a href="javascript:;" class="sub_comment_reply ws_iconfont ws_huifu <%= allowComment ? '' : 'disabled' %>">回复</a>
-			<% if (user && reply.author.id === user.id) { %>
-				<a href="javascript:;" data-id="<%= reply.id %>" class="ws_iconfont ws_shanchu del_cmt">删除</a>
-			<% } %>
+			<a href="javascript:;" class="sub_comment_reply ws_iconfont ws_huifu <?= allowComment ? '' : 'disabled' ?>">回复</a>
+			<? if (user && reply.author.id === user.id) { ?>
+				<a href="javascript:;" data-id="<?= reply.id ?>" class="ws_iconfont ws_shanchu del_cmt">删除</a>
+			<? } ?>
 		</div>
 	</div>
-<% }) %>
+<? }) ?>
 

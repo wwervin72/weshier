@@ -1,51 +1,51 @@
-<% comments.forEach(function (comment, index) { %>
+<? comments.forEach(function (comment, index) { ?>
 	<div class="comment">
 		<div class="cmt_info">
-			<a href="/u/<%= comment.author.userName %>" class="author_avatar">
-				<img src="<%= comment.author.avatar %>" title="<%= comment.author.userName %>">
+			<a href="/u/<?= comment.author.userName ?>" class="author_avatar">
+				<img src="<?= comment.author.avatar ?>" title="<?= comment.author.userName ?>">
 			</a>
 			<div class="cmt_info_right">
-				<a class="author" href="/u/<%= comment.author.userName %>"><%= comment.author.nickName %></a>
+				<a class="author" href="/u/<?= comment.author.userName ?>"><?= comment.author.nickName ?></a>
 				<p class="base_info">
-					<%= index + 1 %>楼 · <%= comment.created_at %>
+					<?= index + 1 ?>楼 · <?= comment.created_at ?>
 				</p>
 			</div>
 		</div>
 		<div class="content_wrap">
 			<p class="content">
-				<%- comment.content %>
+				<?- comment.content ?>
 			</p>
 			<div class="tool_row">
 				<a href="javascript:;" class="heart_comment ws_iconfont ws_zan">赞</a>
-				<a href="javascript:;" class="reply ws_iconfont ws_huifu <%= allowComment ? '' : 'disabled' %>">回复</a>
-				<% if (user && comment.author.id === user.id) { %>
-					<a href="javascript:;" data-id="<%= comment.id %>" class="ws_iconfont ws_shanchu del_cmt">删除</a>
-				<% } %>
+				<a href="javascript:;" class="reply ws_iconfont ws_huifu <?= allowComment ? '' : 'disabled' ?>">回复</a>
+				<? if (user && comment.author.id === user.id) { ?>
+					<a href="javascript:;" data-id="<?= comment.id ?>" class="ws_iconfont ws_shanchu del_cmt">删除</a>
+				<? } ?>
 			</div>
 		</div>
 		<div class="sub_comment_wrap hide_exceed_cmt">
-			<% if (comment.replies && comment.replies.length) { %>
-				<%- include('./subComment.html', {
+			<? if (comment.replies && comment.replies.length) { ?>
+				<?- include('./subComment.html', {
 					replies: comment.replies,
 					user: user
-				}) %>
+				}) ?>
 				<div class="more_comment">
-					<% if(allowComment){ %>
+					<? if(allowComment){ ?>
 						<a href="javascript:;" class="add_comment">添加新评论</a>
-					<% } %>
-					<% if (comment.replies.length > 5){ %>
+					<? } ?>
+					<? if (comment.replies.length > 5){ ?>
 						<span class="expand_comments">
 							<span class="split">|</span>
-							还有<%= comment.replies.length - 5 %>条回复
+							还有<?= comment.replies.length - 5 ?>条回复
 							<a href="javascript:;">展开所有回复</a>
 						</span>
-					<% } %>
+					<? } ?>
 				</div>
-			<% } %>
-			<%- include('./commentEditor.html', {
+			<? } ?>
+			<?- include('./commentEditor.html', {
 				type: 'reply',
 				allowComment: allowComment
-			}) %>
+			}) ?>
 		</div>
 	</div>
-<% }) %>
+<? }) ?>

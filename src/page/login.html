@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<%- include('./common/meta.html') %>
-	<%- include('./common/iconfont.html') %>
-	<%- include('./common/commonResource.html') %>
-	<link rel="stylesheet" href="/assets/static/css/login.css">
-    <title>登录 - 微识</title>
-</head>
-<body>
-	<a href="/" class="ws_logo"></a>
-	<div class="login_wrap">
-		<div class="bg">
-			<img width="100%" src="/assets/image/login_avatar.png">
-		</div>
-		<div class="form">
-			<form id="signin_form">
-				<label class="signin_title">欢迎登录</label>
-				<div class="ws_form_item">
-					<span class="ws_iconfont ws_account"></span>
-					<input type="text" name="userName" autocomplete="off" placeholder="请输入您的账号"/>
-				</div>
-				<div class="ws_form_item">
-					<span class="ws_iconfont ws_pwd"></span>
-					<input type="password" name="passWord" autocomplete="off" placeholder="请输入您的密码"/>
-				</div>
-				<div class="ws_form_item submit">
-					<input type="submit" id="submit" value="登录"/>
-				</div>
-				<div class="ws_form_item remember_join">
-					<label>
-						<input type="checkbox" name="autoLogin">
-						七天内自动登录
-					</label>
-					<div class="right">
-						<a href="/join">注册</a>
-						<a href="/pwd_reset">忘记密码？</a>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<?- include('./common/meta.html') ?>
+		<?- include('./common/iconfont.html') ?>
+		<?- include('./common/commonResource.html') ?>
+		<title>登录 - 微识</title>
+	</head>
+	<body>
+		<a href="/" class="ws_logo"></a>
+		<div class="login_wrap">
+			<div class="bg">
+				<img width="100%" src="/assets/image/login_avatar.png" />
+			</div>
+			<div class="form">
+				<form id="signin_form">
+					<label class="signin_title">欢迎登录</label>
+					<div class="ws_form_item">
+						<span class="ws_iconfont ws_account"></span>
+						<input
+							type="text"
+							name="userName"
+							autocomplete="off"
+							placeholder="请输入您的账号"
+						/>
 					</div>
-				</div>
-				<div class="ws_form_item fast_login">
-					<a href="<%= apiPrefix %>/auth/github" class="ws_iconfont ws_git" title="GitHub 登录"></a>
-				</div>
-			</form>
+					<div class="ws_form_item">
+						<span class="ws_iconfont ws_pwd"></span>
+						<input
+							type="password"
+							name="passWord"
+							autocomplete="off"
+							placeholder="请输入您的密码"
+						/>
+					</div>
+					<div class="ws_form_item submit">
+						<input type="submit" id="submit" value="登录" />
+					</div>
+					<div class="ws_form_item remember_join">
+						<label>
+							<input type="checkbox" name="autoLogin" />
+							七天内自动登录
+						</label>
+						<div class="right">
+							<a href="/join">注册</a>
+							<a href="/pwd_reset">忘记密码？</a>
+						</div>
+					</div>
+					<div class="ws_form_item fast_login">
+						<a
+							href="<?= apiPrefix ?>/auth/github"
+							class="ws_iconfont ws_git"
+							title="GitHub 登录"
+						></a>
+					</div>
+				</form>
+			</div>
 		</div>
-	</div>
-	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-	<script src="/assets/static/js/login.js"></script>
-</body>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	</body>
 </html>

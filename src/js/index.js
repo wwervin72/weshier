@@ -1,5 +1,6 @@
 import { throttling, addEvent, switchBrowserTabs, copySiteInfo, addHeaderScrollListener,
 	switchUserMenu, autoCloseHeaderMenu } from './utils'
+import '../scss/index.scss'
 
 switchBrowserTabs()
 addHeaderScrollListener()

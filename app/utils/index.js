@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const ejs = require('ejs')
 const { validationResult } = require('express-validator')
+const http = require('http')
 
 class RespEntity {
 	constructor (status = true, data, msg) {
@@ -27,6 +28,18 @@ exports.respond = function (res, data, tpl, status) {
 			if (typeof tpl === "number") {
 				tpl = '500.html'
 			}
+			// if (process.env.NODE_ENV === 'development') {
+			// 	tpl = http.get(`http://localhost:3333/index.html`, body => {
+			// 		let str = ''
+			// 		body.on('data', chunk => {
+			// 			str += chunk
+			// 		})
+			// 		body.on('end', () => {
+			// 			res.end(ejs.render(str, data))
+			// 		})
+			// 	})
+			// } else {
+			// }
 			return res.render(tpl, data)
 		},
 		json: () => {

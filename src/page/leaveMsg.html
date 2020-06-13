@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<%- include('./common/meta.html') %>
-	<%- include('./common/iconfont.html') %>
-	<%- include('./common/commonResource.html') %>
-	<title>留言 - 微识</title>
-	<link rel="stylesheet" href="/assets/static/css/leaveMsg.css"/>
-</head>
-<body>
-	<%- include('./common/header.html') %>
-	<div class="container">
-		<%- include('./common/commentEditor.html', {
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<?- include('./common/meta.html') ?>
+		<?- include('./common/iconfont.html') ?>
+		<?- include('./common/commonResource.html') ?>
+		<title>留言 - 微识</title>
+	</head>
+	<body>
+		<?- include('./common/header.html') ?>
+		<div class="container">
+			<?- include('./common/commentEditor.html', {
 			type: 'comment',
 			allowComment: true
-		}) %>
-		<div class="statistic_area">
-			<div class="left" id="leave_msg_cnt">
-			</div>
-			<div class="right">
-				<!-- 右侧放统计信息 -->
-				<!-- GitHub -->
-				<!-- 最新评论 -->
+		}) ?>
+			<div class="statistic_area">
+				<div class="left" id="leave_msg_cnt"></div>
+				<div class="right">
+					<!-- 右侧放统计信息 -->
+					<!-- GitHub -->
+					<!-- 最新评论 -->
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<%- include('./common/sideTool.html', {
+		<?- include('./common/sideTool.html', {
 		heart: false,
 		catelog: false
-	}) %>
-	<%- include('./common/footer.html') %>
-	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-	<script>
-		var commentContainer = document.querySelector('#leave_msg_cnt')
-	</script>
-	<script src="/assets/static/js/leaveMsg.js"></script>
-</body>
+	}) ?>
+		<?- include('./common/footer.html') ?>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+			var commentContainer = document.querySelector("#leave_msg_cnt");
+		</script>
+	</body>
 </html>

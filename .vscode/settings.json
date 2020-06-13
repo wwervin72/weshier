@@ -1,4 +1,5 @@
 {
+	"editor.formatOnSave": true,
 	"rest-client.environmentVariables": {
 		"$shared": {},
 		"development": {

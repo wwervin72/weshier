@@ -246,22 +246,24 @@ gulp.task("html:watch", () => {
 
 gulp.task("watch", () => {
 	watch = true;
-	runSequence(
+	gulp.series(
 		"clean",
-		["script", "style", "html", "image"],
-		["style:watch", "html:watch", "image:watch"]
+		gulp.parallel("script", "style", "html", "image"),
+		gulp.parallel("style:watch", "html:watch", "image:watch")
 	);
 });
 
-gulp.task("build", (cb) => {
+function build (cb) {
 	watch = false;
-	return runSequence(
+	return gulp.series(
 		"clean",
-		["script", "style", "html", "image"],
+		gulp.parallel("script", "style", "html", "image"),
 		"rev",
 		"rev-collector",
 		cb
 	);
-});
+}
 
-gulp.task("default", ["build"]);
+gulp.task("build", build);
+
+exports.default = gulp.series(build)

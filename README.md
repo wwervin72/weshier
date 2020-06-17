@@ -50,10 +50,3 @@
 ### 有好的建议？
 
 [欢迎留言](http://129.204.39.6/message/leave)
-
-如果本项目对您有帮助，可以请我喝杯水，谢谢您的支持。
-
-<div align=center>
-	<img width="150" src="https://github.com/wwervin72/weshier/blob/master/public/image/alipay.jpg?raw=true"/>
-	<img width="150" src="https://github.com/wwervin72/weshier/blob/master/public/image/wechatpay.png?raw=true"/>
-</div>

@@ -6,7 +6,7 @@
 
 1. 首先需要安装本地 nodejs 环境， redis 以及 mysql
 2. 下载依赖包 yarn install
-3. 运行 npm start
+3. 运行 yarn start
 
 ### 网站部分页面
 
